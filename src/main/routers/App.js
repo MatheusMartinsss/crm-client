@@ -1,10 +1,15 @@
-
+import { Box, CssBaseline } from "@mui/material";
+import AuthView from "../../presentation/auth/auth-view";
 
 function App() {
   return (
-    <div className="App">
-   
-    </div>
+    <Box
+      component="main"
+      minHeight='100vh'
+    >
+      <CssBaseline />
+      <AuthView />
+    </Box>
   );
 }
 
