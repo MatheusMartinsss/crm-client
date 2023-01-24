@@ -1,9 +1,10 @@
 import React from 'react'
-import { Grid, TextField, Button, Typography, InputAdornment} from '@mui/material'
+import { Grid, TextField, Button, Typography, InputAdornment } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import FormStatus from '../../../components/form-status';
 import * as yup from "yup";
 
 
@@ -11,7 +12,7 @@ const schema = yup.object({
     email: yup.string().email('Digite um endereço de email valido!.').required('Digite um endereço de email!.'),
     password: yup.string().required('Preencha este campo!')
 })
-const AuthForm = ({ onSubmit }) => {
+const AuthForm = ({ onSubmit, loading, error }) => {
     const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(schema) })
     return (
         <Grid container spacing={1} component='form' onSubmit={handleSubmit(onSubmit)} >
@@ -79,6 +80,9 @@ const AuthForm = ({ onSubmit }) => {
                     }}
                 >
                 </TextField>
+            </Grid>
+            <Grid item xs={12} sx={{ marginTop: '25px' }}>
+                <FormStatus loading={loading} error={error} />
             </Grid>
             <Grid item xs={12} sx={{ marginTop: '25px' }}>
                 <Button size='large' variant="contained" fullWidth type='submit'>Entrar</Button>
