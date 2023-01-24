@@ -1,5 +1,5 @@
 import { Box, CssBaseline } from "@mui/material";
-import AuthView from "../../presentation/auth/auth-view";
+import AuthView from "../../presentation/views/auth/auth-view";
 
 function App() {
   return (
