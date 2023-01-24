@@ -7,6 +7,7 @@ export const authUseCase = async (email, password) => {
         return response.data
     } catch (error) {
         switch (error.response.status) {
+            case httpStatusCode.notFound: throw new UnauthorizedError()
             case httpStatusCode.unauthorized: throw new UnauthorizedError()
             default: throw new ServerError()
         }
