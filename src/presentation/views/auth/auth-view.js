@@ -2,15 +2,20 @@ import { Box } from "@mui/material";
 import React, { useState } from "react";
 import AuthForm from "./components/auth-form";
 import { authUseCase } from "../../../domain/useCases/remote-auth-useCase";
+import { useAuth } from "../../../domain/context/useAuth";
+import { setToken } from "../../hooks/acess-token";
+
 export const AuthView = () => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
+    const { setUser } = useAuth()
     const onSubmit = async (data) => {
         setError('')
         setLoading(true)
         await authUseCase(data.email, data.password)
             .then((response) => {
-                console.log(response)
+                const user = setToken(response)
+                setUser(user)
             }).catch((error) => {
                 setError(error)
             }).finally(() => setLoading(false))
