@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './main/routers/App';
-
+import UseAuthProvider from './domain/context/useAuth';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <UseAuthProvider>
+      <App />
+    </UseAuthProvider>
   </React.StrictMode>
 );
 
