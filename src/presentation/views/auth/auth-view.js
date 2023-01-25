@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import React, { useState } from "react";
 import AuthForm from "./components/auth-form";
 import { authUseCase } from "../../../domain/useCases/remote-auth-useCase";
-const AuthView = () => {
+export const AuthView = () => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const onSubmit = async (data) => {
@@ -25,12 +25,21 @@ const AuthView = () => {
         >
             <Box
                 display='flex'
-                sx={{ maxWidth: '450px', heigh: '550px', padding: '30px', backgroundColor: '#FFFFFF', borderRadius: '5px' }}
+                sx={{
+                    maxWidth: '450px',
+                    heigh: '550px',
+                    padding: '30px',
+                    backgroundColor: '#FFFFFF',
+                    borderRadius: '5px'
+                }}
             >
-                <AuthForm onSubmit={onSubmit} loading={loading} error={error} />
+                <AuthForm
+                    onSubmit={onSubmit}
+                    loading={loading}
+                    error={error}
+                />
             </Box>
         </Box>
     )
 }
 
-export default AuthView
