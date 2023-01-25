@@ -13,3 +13,14 @@ export const authUseCase = async (email, password) => {
         }
     }
 }
+export const validateTokenUseCase = async (token) => {
+    try {
+        const response = await Api.post('/refreshtoken', { token })
+        return response.data
+    } catch (error) {
+        switch (error.response.status) {
+            case httpStatusCode.unauthorized: throw new UnauthorizedError()
+            default: throw new ServerError()
+        }
+    }
+}
