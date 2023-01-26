@@ -5,9 +5,10 @@ import { ProtectedRoute } from "../hooks/protected-route";
 import { RestrictedRoute } from "../hooks/restricted-route";
 import { useAuth } from "../../domain/context/useAuth";
 import { useEffect } from "react";
-import { loadToken, removeToken } from "../../presentation/hooks/acess-token";
+import { loadToken } from "../../presentation/hooks/acess-token";
 import { validateTokenUseCase } from "../../domain/useCases/remote-auth-useCase";
 import Layout from "../../presentation/components/layout/layout";
+import { logout } from "../../presentation/hooks/logout";
 function App() {
   const { user, setUser } = useAuth()
   useEffect(() => {
@@ -18,7 +19,7 @@ function App() {
         .then((response) => {
           setUser(response)
         }).catch(() => {
-          removeToken()
+          logout(setUser)
         })
     }
     verifyUserAlreadyLogged();
@@ -27,6 +28,7 @@ function App() {
   return (
     <BrowserRouter>
       <Layout>
+        <CssBaseline />
         <Routes>
           <Route element={<ProtectedRoute isAllowed={!!user} />}>
             <Route path="/" element={<HomeView />} />
@@ -37,7 +39,6 @@ function App() {
             </Route>
           </Route>
         </Routes>
-        <CssBaseline />
       </Layout>
     </BrowserRouter >
 
