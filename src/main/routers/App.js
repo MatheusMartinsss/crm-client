@@ -1,4 +1,4 @@
-import { Box, CssBaseline } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import { AuthView, HomeView } from '../../presentation/views/index'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ProtectedRoute } from "../hooks/protected-route";
