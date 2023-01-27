@@ -5,7 +5,7 @@ import { ProtectedRoute } from "../hooks/protected-route";
 import { RestrictedRoute } from "../hooks/restricted-route";
 import { useAuth } from "../../domain/context/useAuth";
 import { useEffect } from "react";
-import { loadToken } from "../../presentation/hooks/acess-token";
+import { loadToken, setToken } from "../../presentation/hooks/acess-token";
 import { validateTokenUseCase } from "../../domain/useCases/remote-auth-useCase";
 import Layout from "../../presentation/components/layout/layout";
 import { logout } from "../../presentation/hooks/logout";
@@ -18,6 +18,7 @@ function App() {
       await validateTokenUseCase(token)
         .then((response) => {
           setUser(response)
+          setToken(token)
         }).catch(() => {
           logout(setUser)
         })
