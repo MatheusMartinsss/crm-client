@@ -10,8 +10,10 @@ const Layout = ({ children }) => {
             component="main"
             minHeight='100vh'
         >
-            <Header/>
-            {children}
+            <Header />
+            <Box sx={{ flexGrow: '1', padding: 5 }}>
+                {children}
+            </Box>
         </Box >
         :
         <Box

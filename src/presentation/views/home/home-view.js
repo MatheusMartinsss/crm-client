@@ -1,10 +1,11 @@
+import { Box } from '@mui/material'
 import React from 'react'
-
+import NegociacoesTable from '../../components/negociacoes-list/negociacoes-table'
 
 export const HomeView = () => {
     return (
-        <React.Fragment>
-            <h1>Home</h1>
-        </React.Fragment>
+        <Box flexGrow={1}>
+            <NegociacoesTable />
+        </Box>
     )
 }
