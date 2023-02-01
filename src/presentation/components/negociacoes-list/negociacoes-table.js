@@ -35,10 +35,10 @@ export default function NegociacoesTable() {
                 <TableBody>
                     {data.map((row) => (
                         <TableRow key={row.id}>
-                            <TableCell align="left">{row.Group.name}</TableCell>
-                            <TableCell align="left">{row.name}</TableCell>
-                            <TableCell align="left">{row.Vendedor.name}</TableCell>
-                            <TableCell align="left">{row.Cliente.name} {row.Cliente.lastname}</TableCell>
+                            <TableCell align="left">{row?.Group?.name}</TableCell>
+                            <TableCell align="left">{row?.name}</TableCell>
+                            <TableCell align="left">{row?.Vendedor?.name}</TableCell>
+                            <TableCell align="left">{row?.Cliente?.name} {row?.Cliente?.lastname}</TableCell>
                             <TableCell align="left">{row.closeExpect || 'vazio'}</TableCell>
                             {!row.Tags.length ? (
                                 <TableCell align='left'>Vazio</TableCell>
