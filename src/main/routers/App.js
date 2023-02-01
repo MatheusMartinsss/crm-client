@@ -1,5 +1,4 @@
 import { CssBaseline } from "@mui/material";
-import { AuthView, HomeView } from '../../presentation/views/index'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ProtectedRoute } from "../hooks/protected-route";
 import { RestrictedRoute } from "../hooks/restricted-route";
@@ -7,8 +6,9 @@ import { useAuth } from "../../domain/context/useAuth";
 import { useEffect } from "react";
 import { loadToken, setToken } from "../../presentation/hooks/acess-token";
 import { validateTokenUseCase } from "../../domain/useCases/remote-auth-useCase";
-import Layout from "../../presentation/components/layout/layout";
 import { logout } from "../../presentation/hooks/logout";
+import { MakeAuthView, MakeHomeView } from './useCases/'
+import Layout from "../../presentation/components/layout/layout";
 function App() {
   const { user, setUser } = useAuth()
   useEffect(() => {
@@ -32,11 +32,11 @@ function App() {
         <CssBaseline />
         <Routes>
           <Route element={<ProtectedRoute isAllowed={!!user} />}>
-            <Route path="/" element={<HomeView />} />
+            <Route path="/" element={<MakeHomeView />} />
           </Route>
           <Route>
             <Route element={<RestrictedRoute user={user} />}>
-              <Route path="auth" element={<AuthView />} />
+              <Route path="auth" element={<MakeAuthView />} />
             </Route>
           </Route>
         </Routes>
