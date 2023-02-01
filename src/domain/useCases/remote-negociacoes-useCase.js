@@ -13,3 +13,14 @@ export const remoteGetNegociacoesUseCase = async () => {
         }
     }
 }
+export const remoteAddNegociacaoUseCase = async (body) => {
+    try {
+        const response = await Api.post('/negociacao', { ...body })
+        return response.data
+    } catch (error) {
+        switch (error.response.status) {
+            case httpStatusCode.unauthorized: throw new UnauthorizedError()
+            default: throw new ServerError()
+        }
+    }
+}
