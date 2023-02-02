@@ -1,20 +1,25 @@
 import React, { useContext, useState } from 'react'
-export const context = React.createContext([])
+export const Ctx = React.createContext([])
 
 const UseNegociacaoProvider = ({ children }) => {
     const [data, setData] = useState([]);
 
+
     const getNegociacoes = () => data
 
-    const addNegociacao = (data) => setData((state) => ({ ...state, data }))
+    const addNegociacao = (data) => {
+        setData((state) => [...state, data])
+    }
+
+    const setNegociacoes = (data) => setData(data)
     return (
-        <context.Provider value={{ getNegociacoes, addNegociacao }}>
+        <Ctx.Provider value={{ getNegociacoes, addNegociacao, setNegociacoes }}>
             {children}
-        </context.Provider>
+        </Ctx.Provider>
     )
 }
 export function useNegociacao() {
-    const context = useContext(context);
+    const context = useContext(Ctx);
     return context;
 }
 export default UseNegociacaoProvider;

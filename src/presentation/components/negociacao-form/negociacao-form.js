@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { remoteListClientesUseCase } from '../../../domain/useCases/remote-clientes-useCase';
 import { remoteAddNegociacaoUseCase } from '../../../domain/useCases/remote-negociacoes-useCase';
 import AutoCompleteHookForm from '../autoCompleteHookForm';
-
+import { useNegociacao } from '../../../domain/context/useNegociacao';
 const schema = yup.object({
     title: yup.string().required('Titulo obrigatório'),
     description: yup.string(),
@@ -19,15 +19,17 @@ export const NegociacaoForm = () => {
     const { register, handleSubmit, formState: { errors }, control } = useForm({ resolver: yupResolver(schema) })
     const [clientes, setClientes] = useState([])
     const [loading, setLoading] = useState(false)
+    const { addNegociacao } = useNegociacao()
     const handleForm = async (data) => {
         const body = {
             ...data,
             name: data.title,
             cliente_id: data?.cliente?.id
         }
-        await remoteAddNegociacaoUseCase(body).then((response) => {
-            console.log(response)
-        })
+        await remoteAddNegociacaoUseCase(body)
+            .then((response) => {
+                addNegociacao(response)
+            })
     }
     const handleClientes = async () => {
         if (!clientes.length) {
