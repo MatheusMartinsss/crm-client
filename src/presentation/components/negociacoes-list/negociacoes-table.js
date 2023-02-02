@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from "react"
 import { remoteGetNegociacoesUseCase } from '../../../domain/useCases/remote-negociacoes-useCase'
 import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Chip, TableContainer } from '@mui/material'
-
+import { useNegociacao } from "../../../domain/context/useNegociacao"
 
 export default function NegociacoesTable() {
-    const [data, setData] = useState([])
-    const [loading, setLoading] = useState(true)
+    const { getNegociacoes, setNegociacoes } = useNegociacao()
+    const [error, setError] = useState('')
     useEffect(() => {
         const fetchNegociacoes = async () => {
             await remoteGetNegociacoesUseCase()
                 .then((response) => {
-                    setData(response)
+                    setNegociacoes(response)
                 }).catch((error) => {
-                    console.log(error)
-                }).finally(() => {
-                    setLoading(false)
+                    setError(error)
                 })
         }
         fetchNegociacoes()
+        // eslint-disable-next-line 
     }, [])
     return (
         <TableContainer component={Paper}>
@@ -33,19 +32,20 @@ export default function NegociacoesTable() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {data.map((row) => (
+                    {getNegociacoes().map((row) => (
                         <TableRow key={row.id}>
                             <TableCell align="left">{row?.Group?.name}</TableCell>
                             <TableCell align="left">{row?.name}</TableCell>
                             <TableCell align="left">{row?.Vendedor?.name}</TableCell>
                             <TableCell align="left">{row?.Cliente?.name} {row?.Cliente?.lastname}</TableCell>
                             <TableCell align="left">{row.closeExpect || 'vazio'}</TableCell>
-                            {!row.Tags.length ? (
+                            {!row.Tags?.length ? (
                                 <TableCell align='left'>Vazio</TableCell>
                             ) : (
                                 <TableCell align='left' sx={{ gap: 1, display: 'flex' }}>
                                     {row.Tags.map((item) => (
                                         <Chip
+                                            key={item.id}
                                             size='small'
                                             color='primary'
                                             variant='string'

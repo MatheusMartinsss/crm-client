@@ -1,4 +1,3 @@
-import { CssBaseline } from "@mui/material";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ProtectedRoute } from "../hooks/protected-route";
 import { RestrictedRoute } from "../hooks/restricted-route";
@@ -8,6 +7,7 @@ import { loadToken, setToken } from "../../presentation/hooks/acess-token";
 import { validateTokenUseCase } from "../../domain/useCases/remote-auth-useCase";
 import { logout } from "../../presentation/hooks/logout";
 import { MakeAuthView, MakeHomeView } from './useCases/'
+import { CssBaseline } from "@mui/material";
 import Layout from "../../presentation/components/layout/layout";
 function App() {
   const { user, setUser } = useAuth()
