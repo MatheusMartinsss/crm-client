@@ -1,4 +1,4 @@
-import { Button, Grid, TextField } from '@mui/material'
+import { Button,  Grid, TextField } from '@mui/material'
 import React, { useState } from 'react'
 import * as yup from "yup";
 import { useForm } from 'react-hook-form'
@@ -7,16 +7,18 @@ import { remoteListClientesUseCase } from '../../../domain/useCases/remote-clien
 import { remoteAddNegociacaoUseCase } from '../../../domain/useCases/remote-negociacoes-useCase';
 import AutoCompleteHookForm from '../autoCompleteHookForm';
 import { useNegociacao } from '../../../domain/context/useNegociacao';
+import AutoCompleteTagsAdd from '../autoCompleteTagsAdd';
 const schema = yup.object({
     title: yup.string().required('Titulo obrigatório'),
     description: yup.string(),
     cliente_id: yup.mixed(),
     value: yup.mixed(),
-    closeExpect: yup.date()
+    closeExpect: yup.date(),
+    tags: yup.array()
 })
 
 export const NegociacaoForm = () => {
-    const { register, handleSubmit, formState: { errors }, control } = useForm({ resolver: yupResolver(schema) })
+    const { register, handleSubmit, setValue, formState: { errors }, control } = useForm({ resolver: yupResolver(schema) })
     const [clientes, setClientes] = useState([])
     const [loading, setLoading] = useState(false)
     const { addNegociacao } = useNegociacao()
@@ -42,6 +44,7 @@ export const NegociacaoForm = () => {
                 })
         }
     }
+    const handleTags = (tags) => setValue('tags', tags.map((item) => item.id))
     return (
         <Grid container spacing={2} component='form' onSubmit={handleSubmit(handleForm)} >
             <Grid item xs={12} >
@@ -103,6 +106,9 @@ export const NegociacaoForm = () => {
                     error={!!errors.date}
                     helperText={errors?.date?.message}
                 ></TextField>
+            </Grid>
+            <Grid item xs={12}>
+                <AutoCompleteTagsAdd handleTag={handleTags} control={control} name='tags' />
             </Grid>
             <Grid item xs={6}>
                 <Button fullWidth variant='contained' color='error'>Cancelar</Button>
