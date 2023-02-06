@@ -6,12 +6,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { remoteListClientesUseCase } from '../../../domain/useCases/remote-clientes-useCase';
 import { remoteAddNegociacaoUseCase } from '../../../domain/useCases/remote-negociacoes-useCase';
 import AutoCompleteHookForm from '../autoCompleteHookForm';
-import { useNegociacao } from '../../../domain/context/useNegociacao';
 import AutoCompleteTagsAdd from '../autoCompleteTagsAdd';
+import AutoCompleteGroups from '../autoCompleteGroups';
+import { useNegociacao } from '../../../domain/context/useNegociacao';
 const schema = yup.object({
     title: yup.string().required('Titulo obrigatório'),
     description: yup.string(),
     cliente_id: yup.mixed(),
+    group_id: yup.mixed().required('Selecione um grupo'),
     value: yup.mixed(),
     closeExpect: yup.date(),
     tags: yup.array()
@@ -29,7 +31,8 @@ export const NegociacaoForm = () => {
             value: data?.value,
             closeExpect: data?.closeExpect,
             tags: data?.tags,
-            cliente_id: data?.cliente?.id
+            cliente_id: data?.cliente?.id,
+            group_id: data?.group_id
         }
         await remoteAddNegociacaoUseCase(body)
             .then((response) => {
@@ -48,8 +51,16 @@ export const NegociacaoForm = () => {
         }
     }
     const handleTags = (tags) => setValue('tags', tags.map((item) => item.id))
+    const handleGroup = (groupId) => setValue('group_id', groupId)
     return (
         <Grid container spacing={2} component='form' onSubmit={handleSubmit(handleForm)} >
+            <Grid item xs={12}>
+                <AutoCompleteGroups
+                    handleGroup={handleGroup}
+                    error={!!errors.group_id}
+                    helperText={errors?.group_id?.message}
+                />
+            </Grid>
             <Grid item xs={12} >
                 <TextField
                     {...register('title')}
@@ -111,7 +122,9 @@ export const NegociacaoForm = () => {
                 ></TextField>
             </Grid>
             <Grid item xs={12}>
-                <AutoCompleteTagsAdd handleTag={handleTags} control={control} name='tags' />
+                <AutoCompleteTagsAdd
+                    handleTag={handleTags}
+                />
             </Grid>
             <Grid item xs={6}>
                 <Button fullWidth variant='contained' color='error'>Cancelar</Button>
