@@ -1,4 +1,4 @@
-import { Button,  Grid, TextField } from '@mui/material'
+import { Button, Grid, TextField } from '@mui/material'
 import React, { useState } from 'react'
 import * as yup from "yup";
 import { useForm } from 'react-hook-form'
@@ -24,8 +24,11 @@ export const NegociacaoForm = () => {
     const { addNegociacao } = useNegociacao()
     const handleForm = async (data) => {
         const body = {
-            ...data,
             name: data.title,
+            description: data?.description,
+            value: data?.value,
+            closeExpect: data?.closeExpect,
+            tags: data?.tags,
             cliente_id: data?.cliente?.id
         }
         await remoteAddNegociacaoUseCase(body)
