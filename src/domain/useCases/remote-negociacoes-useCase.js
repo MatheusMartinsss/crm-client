@@ -24,3 +24,16 @@ export const remoteAddNegociacaoUseCase = async (body) => {
         }
     }
 }
+export const remoteFetchNegociacaoUseCase = async (id) => {
+
+    try {
+        const response = await Api.get(`/negociacao/${id}`)
+        return response.data
+    } catch (error) {
+        switch (error.response.status) {
+            case httpStatusCode.notFound: throw new NotFoundError('negociacoes')
+            case httpStatusCode.unauthorized: throw new UnauthorizedError()
+            default: throw new ServerError()
+        }
+    }
+}
