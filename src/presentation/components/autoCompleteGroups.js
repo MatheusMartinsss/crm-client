@@ -4,7 +4,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 import { remoteListGroupsUseCase } from '../../domain/useCases/remote-groups-useCase';
 
-export default function AutoCompleteGroups({ handleGroup, error, helperText }) {
+export default function AutoCompleteGroups({ handleGroup, error, helperText, initialValue }) {
     const [open, setOpen] = React.useState(false);
     const [options, setOptions] = React.useState([]);
     const loading = open && options.length === 0;
@@ -31,6 +31,7 @@ export default function AutoCompleteGroups({ handleGroup, error, helperText }) {
             onClose={() => {
                 setOpen(false);
             }}
+            defaultValue={initialValue || null}
             fullWidth
             isOptionEqualToValue={(option, value) => option.name === value.name}
             getOptionLabel={(option) => option.name}
