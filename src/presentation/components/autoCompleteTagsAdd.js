@@ -106,9 +106,9 @@ const Button = styled(ButtonBase)(({ theme }) => ({
     },
 }));
 
-export default function AutoCompleteTagsAdd({ handleTag }) {
+export default function AutoCompleteTagsAdd({ handleTag, initialValue }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [value, setValue] = React.useState([]);
+    const [value, setValue] = React.useState(initialValue || []);
     const [pendingValue, setPendingValue] = React.useState([]);
     const [options, setOptions] = React.useState([])
     const theme = useTheme();
