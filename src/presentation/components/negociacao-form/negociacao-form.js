@@ -9,7 +9,7 @@ import AutoCompleteGroups from '../autoCompleteGroups';
 import AutoCompleteClientes from '../autoCompleteClientes';
 import { useNegociacao } from '../../../domain/context/useNegociacao';
 const schema = yup.object({
-    title: yup.string().required('Titulo obrigatório'),
+    name: yup.string().required('Titulo obrigatório'),
     description: yup.string(),
     cliente_id: yup.mixed(),
     group_id: yup.mixed().required('Selecione um grupo'),
@@ -19,23 +19,29 @@ const schema = yup.object({
 })
 
 export const NegociacaoForm = ({ data }) => {
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm({ resolver: yupResolver(schema) })
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+        resolver: yupResolver(schema),
+        defaultValues: data || null
+    })
     const { addNegociacao } = useNegociacao()
     let editMode = !!data
-    const handleForm = async (data) => {
+    const handleForm = async (formData) => {
         const body = {
-            name: data.title,
-            description: data?.description,
-            value: data?.value,
-            closeExpect: data?.closeExpect,
-            tags: data?.tags,
-            cliente_id: data?.cliente_id,
-            group_id: data?.group_id
+            name: formData.name,
+            description: formData?.description,
+            value: formData?.value,
+            closeExpect: formData?.closeExpect,
+            tags: formData?.tags,
+            cliente_id: formData?.cliente_id,
+            group_id: formData?.group_id
         }
-        await remoteAddNegociacaoUseCase(body)
-            .then((response) => {
+        if (editMode) {
+
+        } else {
+            await remoteAddNegociacaoUseCase(body).then((response) => {
                 addNegociacao(response)
             })
+        }
     }
 
     const handleTags = (tags) => setValue('tags', tags.map((item) => item.id))
@@ -50,16 +56,17 @@ export const NegociacaoForm = ({ data }) => {
                 <AutoCompleteGroups
                     handleGroup={handleGroup}
                     error={!!errors.group_id}
+                    initialValue={data?.Group}
                     helperText={errors?.group_id?.message}
                 />
             </Grid>
             <Grid item xs={12} >
                 <TextField
-                    {...register('title')}
+                    {...register('name')}
                     fullWidth
                     placeholder='Titulo'
-                    error={!!errors.title}
-                    helperText={errors.title?.message}
+                    error={!!errors.name}
+                    helperText={errors.name?.message}
                 >
                 </TextField>
             </Grid>
@@ -78,6 +85,7 @@ export const NegociacaoForm = ({ data }) => {
                     handleCliente={handleCliente}
                     error={!!errors.cliente_id}
                     helperText={errors?.cliente_id?.message}
+                    initialValue={data?.Cliente}
                 />
             </Grid>
             <Grid item xs={12} >
@@ -102,6 +110,7 @@ export const NegociacaoForm = ({ data }) => {
             <Grid item xs={12}>
                 <AutoCompleteTagsAdd
                     handleTag={handleTags}
+                    initialValue={data?.Tags}
                 />
             </Grid>
             <Grid item xs={6}>
