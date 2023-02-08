@@ -4,7 +4,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 import { remoteListClientesUseCase } from '../../domain/useCases/remote-clientes-useCase';
 
-export default function AutoCompleteClientes({ handleCliente, error, helperText }) {
+export default function AutoCompleteClientes({ handleCliente, error, helperText, initialValue }) {
     const [open, setOpen] = React.useState(false);
     const [options, setOptions] = React.useState([]);
     const loading = open && options.length === 0;
@@ -32,6 +32,7 @@ export default function AutoCompleteClientes({ handleCliente, error, helperText 
                 setOpen(false);
             }}
             fullWidth
+            defaultValue={initialValue || null}
             isOptionEqualToValue={(option, value) => option.name === value.name}
             getOptionLabel={(option) => option.name}
             options={options}
