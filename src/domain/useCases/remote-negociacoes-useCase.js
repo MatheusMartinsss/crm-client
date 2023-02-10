@@ -37,3 +37,15 @@ export const remoteFetchNegociacaoUseCase = async (id) => {
         }
     }
 }
+export const remoteUpdateNegociacaoUseCase = async (id, body) => {
+    try {
+        const response = await Api.put(`/negociacao/${id}`, { ...body })
+        return response.data
+    } catch (error) {
+        switch (error.response.status) {
+            case httpStatusCode.notFound: throw new NotFoundError('negociacao')
+            case httpStatusCode.unauthorized: throw new UnauthorizedError()
+            default: throw new ServerError()
+        }
+    }
+}

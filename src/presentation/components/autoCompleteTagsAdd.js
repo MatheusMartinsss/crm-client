@@ -113,6 +113,10 @@ export default function AutoCompleteTagsAdd({ handleTag, initialValue }) {
     const [options, setOptions] = React.useState([])
     const theme = useTheme();
 
+    React.useEffect(() => {
+        handleTag(value)
+        // eslint-disable-next-line
+    }, [value])
     const handleClick = async (event) => {
         setPendingValue([])
         setAnchorEl(event.currentTarget);
@@ -126,7 +130,6 @@ export default function AutoCompleteTagsAdd({ handleTag, initialValue }) {
     const handleClose = () => {
         if (pendingValue.length) {
             setValue(pendingValue);
-            handleTag(pendingValue)
         }
         if (anchorEl) {
             anchorEl.focus();
