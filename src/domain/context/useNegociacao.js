@@ -12,8 +12,17 @@ const UseNegociacaoProvider = ({ children }) => {
     }
 
     const setNegociacoes = (data) => setData(data)
+
+    const updateNegociacao = (id, body) => {
+        const newValue = data.map((item) => {
+            if (item.id === id)
+                return body
+            return item
+        })
+        setData(newValue)
+    }
     return (
-        <Ctx.Provider value={{ getNegociacoes, addNegociacao, setNegociacoes }}>
+        <Ctx.Provider value={{ getNegociacoes, addNegociacao, setNegociacoes, updateNegociacao }}>
             {children}
         </Ctx.Provider>
     )

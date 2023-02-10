@@ -35,7 +35,7 @@ export const NegociacaoForm = ({ data }) => {
         resolver: yupResolver(schema),
         defaultValues: initialData || null
     })
-    const { addNegociacao } = useNegociacao()
+    const { addNegociacao, updateNegociacao } = useNegociacao()
     let editMode = !!data
     const handleForm = async (formData) => {
         const body = {
@@ -51,7 +51,7 @@ export const NegociacaoForm = ({ data }) => {
         if (editMode) {
             const newValue = getOnlyEditedFields(initialData, formData)
             await remoteUpdateNegociacaoUseCase(body.id, newValue).then((response) => {
-                console.log(response)
+                updateNegociacao(response.id, response)
             })
         } else {
             await remoteAddNegociacaoUseCase(body).then((response) => {
