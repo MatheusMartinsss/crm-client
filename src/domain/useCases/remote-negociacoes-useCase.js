@@ -49,3 +49,16 @@ export const remoteUpdateNegociacaoUseCase = async (id, body) => {
         }
     }
 }
+
+export const getNegociacoesByGroup = async () => {
+    try {
+        const response = await Api.get('/groups/negociacoes')
+        return response.data
+    } catch (error) {
+        switch (error.response.status) {
+            case httpStatusCode.notFound: throw new NotFoundError('Grupos')
+            case httpStatusCode.unauthorized: throw new UnauthorizedError()
+            default: throw new ServerError()
+        }
+    }
+}
