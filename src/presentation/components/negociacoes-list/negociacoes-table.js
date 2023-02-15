@@ -1,19 +1,70 @@
 import React, { useEffect, useState } from "react"
 import { remoteGetNegociacoesUseCase, remoteFetchNegociacaoUseCase } from '../../../domain/useCases/remote-negociacoes-useCase'
-import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Chip, TableContainer, IconButton, Fab } from '@mui/material'
+import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Chip, TableContainer, IconButton, Fab, TableSortLabel } from '@mui/material'
 import { useNegociacao } from "../../../domain/context/useNegociacao"
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { NegociacaoModal } from '../../components/negociacao-form/negociacao-modal'
+
+const createData = (id, groupName, title, vendedorName, clienteName, clienteLastName, closeExpect, tags) => {
+    return {
+        id,
+        groupName,
+        title,
+        vendedorName,
+        clienteName,
+        clienteLastName,
+        closeExpect,
+        tags
+    }
+}
+
+const colums = [
+    {
+        id: 'groupName',
+        label: 'Fase Atual'
+    }, {
+        id: 'title',
+        label: 'Titulo'
+    }, {
+        id: 'vendedorName',
+        label: 'Vendedor'
+    }, {
+        id: 'clienteName',
+        label: 'Cliente'
+    }, {
+        id: 'closeExpect',
+        label: 'Fechamento Esperado'
+    }, {
+        id: 'tags',
+        label: 'Tags'
+    }, {
+        id: 'options',
+        label: 'Opções'
+    }
+]
+
 export default function NegociacoesTable() {
     const { getNegociacoes, setNegociacoes } = useNegociacao()
     const [open, setOpen] = useState(false)
     const [error, setError] = useState('')
+    const [orderBy, setOrderBy] = useState('group')
+    const [order, setOrder] = useState('asc')
     const [negociacao, setNegociacao] = useState(null)
     useEffect(() => {
         const fetchNegociacoes = async () => {
             await remoteGetNegociacoesUseCase()
                 .then((response) => {
-                    setNegociacoes(response)
+                    const formated = response.map((item) => createData(
+                        item.id,
+                        item.Group.name,
+                        item.name,
+                        item.Vendedor.name,
+                        item.Cliente.name,
+                        item.Cliente.lastname,
+                        item.closeExpect,
+                        item.Tags)
+                    )
+                    setNegociacoes(formated)
                 }).catch((error) => {
                     setError(error)
                 })
@@ -33,35 +84,61 @@ export default function NegociacoesTable() {
 
     const handleModal = () => setOpen((state) => !state)
 
+    const handleSortChange = (column) => {
+        const sortOrder = column === orderBy && order === 'asc' ? 'desc' : 'asc';
+        setOrder(sortOrder)
+        setOrderBy(column)
+        handleSorting(column, sortOrder, getNegociacoes())
+    }
+    const handleSorting = (sortField, sortOrder, data) => {
+        if (sortField) {
+            const sorted = [...data].sort((a, b) => {
+                if (a[sortField] === null) return 1;
+                if (b[sortField] === null) return -1;
+                if (a[sortField] === null && b[sortField] === null) return 0;
+                return (
+                    a[sortField].toString().localeCompare(b[sortField].toString(), "en", {
+                        numeric: true,
+                    }) * (sortOrder === "asc" ? 1 : -1)
+                );
+            });
+            setNegociacoes(sorted)
+        }
+    }
     return (
         <React.Fragment>
-
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650, borderRadius: 5, border: 2, borderColor: '#A4D3EE' }} >
                     <TableHead sx={{ backgroundColor: '#B0E2FF', }}>
                         <TableRow >
-                            <TableCell align="left" >Fase atual</TableCell>
-                            <TableCell align="left">Titulo</TableCell>
-                            <TableCell align="left">Vendedor</TableCell>
-                            <TableCell align="left">Cliente</TableCell>
-                            <TableCell align="left">Fechamento esperado</TableCell>
-                            <TableCell align="left">Tags</TableCell>
-                            <TableCell align="left">Opções</TableCell>
+                            {colums.map((item) => (
+                                <TableCell
+                                    key={item.id}
+                                    align="left"
+                                    onClick={() => handleSortChange(item.id)}
+                                >
+                                    <TableSortLabel
+                                        active={orderBy === item.id}
+                                    >
+                                        {item.label}
+                                    </TableSortLabel>
+                                </TableCell>
+                            ))}
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {getNegociacoes().map((row) => (
                             <TableRow key={row.id}>
-                                <TableCell align="left">{row?.Group?.name}</TableCell>
-                                <TableCell align="left">{row?.name}</TableCell>
-                                <TableCell align="left">{row?.Vendedor?.name}</TableCell>
-                                <TableCell align="left">{row?.Cliente?.name} {row?.Cliente?.lastname}</TableCell>
+                                <TableCell align="left">{row?.groupName}</TableCell>
+                                <TableCell align="left">{row?.title}</TableCell>
+                                <TableCell align="left">{row?.vendedorName}</TableCell>
+                                <TableCell align="left">{row?.clienteName} {row?.clienteLastname}</TableCell>
                                 <TableCell align="left">{row.closeExpect || 'vazio'}</TableCell>
-                                {!row.Tags?.length ? (
+                                {!row?.tags?.length ? (
                                     <TableCell align='left'>Vazio</TableCell>
                                 ) : (
                                     <TableCell align='left' >
-                                        {row.Tags.map((item) => (
+                                        {row?.tags?.map((item) => (
                                             <Chip
                                                 key={item.id}
                                                 size='small'
