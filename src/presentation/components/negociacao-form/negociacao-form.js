@@ -22,10 +22,10 @@ const schema = yup.object({
 
 export const NegociacaoForm = ({ data, handleModal }) => {
     const initialData = {
-        id: data.id,
-        name: data.name,
-        description: data.description,
-        value: data.value,
+        id: data?.id || null, 
+        name: data?.name,
+        description: data?.description,
+        value: data?.value,
         closeExpect: formatENG(data?.closeExpect),
         tags: data?.Tags.map((item) => item.id),
         cliente_id: data?.Cliente?.id,
