@@ -12,7 +12,7 @@ export const NegociacaoModal = ({ data, open, handleModal }) => {
                 onClose={handleModal}
             >
                 <DialogContent>
-                    <NegociacaoForm data = {data} />
+                    <NegociacaoForm data={data} handleModal={handleModal} />
                 </DialogContent>
             </Dialog>
         </React.Fragment>
