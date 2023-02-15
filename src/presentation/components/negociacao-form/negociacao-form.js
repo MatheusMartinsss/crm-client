@@ -20,7 +20,7 @@ const schema = yup.object({
     tags: yup.array()
 })
 
-export const NegociacaoForm = ({ data }) => {
+export const NegociacaoForm = ({ data, handleModal }) => {
     const initialData = {
         id: data.id,
         name: data.name,
@@ -52,10 +52,12 @@ export const NegociacaoForm = ({ data }) => {
             const newValue = getOnlyEditedFields(initialData, formData)
             await remoteUpdateNegociacaoUseCase(body.id, newValue).then((response) => {
                 updateNegociacao(response.id, response)
+                handleModal()
             })
         } else {
             await remoteAddNegociacaoUseCase(body).then((response) => {
                 addNegociacao(response)
+                handleModal()
             })
         }
     }
