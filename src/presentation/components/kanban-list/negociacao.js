@@ -1,26 +1,27 @@
 import React from 'react'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, Paper } from '@mui/material'
 import { Draggable } from "react-beautiful-dnd";
 const getItemStyle = (isDragging, draggableStyle) => ({
     // some basic styles to make the items look a bit nicer
     userSelect: "none",
-    padding: 8 * 2,
+    padding: 10,
     margin: `0 0 8px 0`,
-
     // change background colour if dragging
-    background: isDragging ? "lightgreen" : "grey",
-
+    background: isDragging ? "lightgreen" : "#FFFFFF",
+    borderRadius: 8,
     // styles we need to apply on draggables
     ...draggableStyle
 });
 const Negociacao = ({ negociacao, index }) => {
-    const { name,  id } = negociacao
+    const { name, description, Cliente, value, id } = negociacao
     return (
         <Draggable key={id} draggableId={id.toString()} index={index}  >
             {(provided, snapshot) => (
                 <Box
-                    bgcolor='#F5F5F5'
                     display='flex'
+                    flexDirection='column'
+                    component={Paper}
+                    elevation={2}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
@@ -29,7 +30,10 @@ const Negociacao = ({ negociacao, index }) => {
                         provided.draggableProps.style
                     )}
                 >
-                    <Typography variant='h5'>{name}</Typography>
+                    <Typography variant='h6'>{name}</Typography>
+                    <Typography variant='subtitle1'>{description}</Typography>
+                    <Typography variant='subtitle2'>{Cliente.name}</Typography>
+                    <Typography variant='subtitle2'>R${value}</Typography>
                 </Box>
             )}
         </Draggable>

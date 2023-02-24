@@ -11,11 +11,11 @@ export const HomeView = () => {
 
     const handleModal = () => setOpen((state) => !state)
     return (
-        <Box display='flex' justifyContent='space-between' flexDirection='column' gap={5}>
+        <Box display='flex' justifyContent='space-between' flexDirection='column' gap={1}>
             <Box
                 display='flex'
                 flexDirection='row'
-                gap={2}
+                gap={1}
             >
                 <ButtonGroup size='small' variant="outlined" aria-label="outlined primary button group">
                     <Button onClick={() => setListType('list')}>

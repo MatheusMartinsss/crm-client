@@ -1,18 +1,23 @@
 import React from "react";
-import { Box, Divider, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import NegociacoesList from "./negociacoes-list";
 export const GroupBox = ({ groupName, groupId, data, index }) => {
     return (
         <Box
             display='flex'
             flexDirection='column'
-            minWidth='300px'
-            bgcolor='#1E80FF'
-            gap={2}
-            padding='10px'
+            minWidth='350px'
         >
-            <Typography align='left' color='white' variant="h5">{groupName}</Typography>
-            <Divider />
+            <Box
+                display='flex'
+                padding='5px'
+                bgcolor='#F5F5F5'
+                height='80px'
+                flexDirection='column'
+            >
+                <Typography align='left' variant="h5">{groupName}</Typography>
+                <Typography variant="subtitle1">R$100,00 - {data.length} Negociacoes</Typography>
+            </Box>
             <NegociacoesList
                 negociacoes={data}
                 group={groupName}

@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Box, Button } from '@mui/material';
 import Negociacao from './negociacao';
 import { Droppable } from "react-beautiful-dnd";
 const getListStyle = isDraggingOver => ({
-    background: isDraggingOver ? "lightblue" : "lightgrey",
-    padding: 8,
-    width: 250
+    background: isDraggingOver ? "lightblue" : "#F5F5F5",
+    padding: 5,
+    minWidth: 350
 });
 
 const NegociacoesList = ({ negociacoes, group, index, groupId }) => {
@@ -15,15 +15,17 @@ const NegociacoesList = ({ negociacoes, group, index, groupId }) => {
                 <Box
                     display='flex'
                     flexDirection='column'
-                    gap={1}
                     ref={provided.innerRef}
                     style={getListStyle(snapshot.isDraggingOver)}
                     {...provided.droppableProps}
                 >
-
                     {provided.placeholder}
                     {negociacoes.map((negociacao, idx) => (
-                        <Negociacao key={idx} index={idx} negociacao={negociacao} />
+                        <Negociacao
+                            key={idx}
+                            index={idx}
+                            negociacao={negociacao}
+                        />
                     ))}
                 </Box>
             )}

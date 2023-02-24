@@ -9,11 +9,8 @@ const NegociacoesKankanList = () => {
     const [data, setData] = useState([])
     useEffect(() => {
         const fetchData = async () => {
-            await getNegociacoesByGroup().then((response) => {
-                setData(response)
-            }).catch((error) => {
-                console.log(error)
-            })
+            const response = await getNegociacoesByGroup()
+            setData(response)
         }
         fetchData()
     }, [])
@@ -57,34 +54,24 @@ const NegociacoesKankanList = () => {
         }
     }
     const updateNegociacao = async (id, groupId) => {
-        await remoteUpdateNegociacaoUseCase(id, { group_id: groupId }).then((response) => {
-            console.log(response)
-        })
+        await remoteUpdateNegociacaoUseCase(id, { group_id: groupId })
     }
     return (
-        <Box
-            display='flex'
-            margin='auto'
-            padding='5px'
-        >
-            <DragDropContext onDragEnd={onDragEnd}>
-                <Box
-                    display='flex'
-                    flexDirection={{ xs: 'column', md: 'row' }}
-                    justifyContent='space-between'
-                    gap={2}
-                >
-                    {data.map((item) => (
-                        <GroupBox
-                            key={item.id}
-                            groupName={item.name}
-                            groupId={item.id}
-                            data={item.Negociacoes}
-                        />
-                    ))}
-                </Box>
-            </DragDropContext>
-        </Box>
+        <DragDropContext onDragEnd={onDragEnd}>
+            <Box
+                display='flex'
+                flexDirection={{ xs: 'column', md: 'row' }}
+            >
+                {data.map((item) => (
+                    <GroupBox
+                        key={item.id}
+                        groupName={item.name}
+                        groupId={item.id}
+                        data={item.Negociacoes}
+                    />
+                ))}
+            </Box>
+        </DragDropContext>
     )
 }
 
