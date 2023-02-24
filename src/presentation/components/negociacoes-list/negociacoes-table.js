@@ -47,24 +47,24 @@ export default function NegociacoesTable() {
     const { getNegociacoes, setNegociacoes } = useNegociacao()
     const [open, setOpen] = useState(false)
     const [error, setError] = useState('')
-    const [orderBy, setOrderBy] = useState('group')
+    const [orderBy, setOrderBy] = useState('groupName')
     const [order, setOrder] = useState('asc')
     const [negociacao, setNegociacao] = useState(null)
+    const negociacoes = getNegociacoes().map((item) => createData(
+        item.id,
+        item.Group.name,
+        item.name,
+        item.Vendedor.name,
+        item.Cliente.name,
+        item.Cliente.lastname,
+        item.closeExpect,
+        item.Tags
+    ))
     useEffect(() => {
         const fetchNegociacoes = async () => {
             await remoteGetNegociacoesUseCase()
                 .then((response) => {
-                    const formated = response.map((item) => createData(
-                        item.id,
-                        item.Group.name,
-                        item.name,
-                        item.Vendedor.name,
-                        item.Cliente.name,
-                        item.Cliente.lastname,
-                        item.closeExpect,
-                        item.Tags)
-                    )
-                    setNegociacoes(formated)
+                    setNegociacoes(response)
                 }).catch((error) => {
                     setError(error)
                 })
@@ -88,7 +88,6 @@ export default function NegociacoesTable() {
         const sortOrder = column === orderBy && order === 'asc' ? 'desc' : 'asc';
         setOrder(sortOrder)
         setOrderBy(column)
-        handleSorting(column, sortOrder, getNegociacoes())
     }
     const handleSorting = (sortField, sortOrder, data) => {
         if (sortField) {
@@ -102,7 +101,7 @@ export default function NegociacoesTable() {
                     }) * (sortOrder === "asc" ? 1 : -1)
                 );
             });
-            setNegociacoes(sorted)
+            return sorted
         }
     }
     return (
@@ -127,7 +126,7 @@ export default function NegociacoesTable() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {getNegociacoes().map((row) => (
+                        {handleSorting(orderBy, order, negociacoes).map((row) => (
                             <TableRow key={row.id}>
                                 <TableCell align="left">{row?.groupName}</TableCell>
                                 <TableCell align="left">{row?.title}</TableCell>
