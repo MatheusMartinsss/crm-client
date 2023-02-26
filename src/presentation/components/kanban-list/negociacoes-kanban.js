@@ -40,6 +40,9 @@ const NegociacoesKankanList = () => {
 
             dNegociacoes.push(negociacao)
 
+            dGroup.valueTotal = parseFloat(dGroup.valueTotal) + parseFloat(negociacao.value)
+            sGroup.valueTotal = parseFloat(sGroup.valueTotal) - parseFloat(negociacao.value)
+
             dGroup.Negociacoes = dNegociacoes
             sGroup.Negociacoes = sNegociacoes
 
@@ -66,6 +69,8 @@ const NegociacoesKankanList = () => {
                     <GroupBox
                         key={item.id}
                         groupName={item.name}
+                        totalValue={item.valueTotal}
+                        groupDescription={item.description}
                         groupId={item.id}
                         data={item.Negociacoes}
                     />
