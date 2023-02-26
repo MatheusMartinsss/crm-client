@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography } from '@mui/material';
 import NegociacoesList from "./negociacoes-list";
-export const GroupBox = ({ groupName, groupId, data, index }) => {
+export const GroupBox = ({ groupName, groupId, totalValue, groupDescription, data, index }) => {
     return (
         <Box
             display='flex'
@@ -16,7 +16,7 @@ export const GroupBox = ({ groupName, groupId, data, index }) => {
                 flexDirection='column'
             >
                 <Typography align='left' variant="h5">{groupName}</Typography>
-                <Typography variant="subtitle1">R$100,00 - {data.length} Negociacoes</Typography>
+                <Typography variant="subtitle1">R${totalValue} - {data.length} Negociacoes</Typography>
             </Box>
             <NegociacoesList
                 negociacoes={data}
