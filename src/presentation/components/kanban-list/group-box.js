@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography } from '@mui/material';
 import NegociacoesList from "./negociacoes-list";
-export const GroupBox = ({ groupName, groupId, totalValue, groupDescription, data, index }) => {
+export const GroupBox = ({ groupName, groupId, totalValue, groupDescription, data, index, handleEditNegociacao }) => {
     return (
         <Box
             display='flex'
@@ -23,6 +23,7 @@ export const GroupBox = ({ groupName, groupId, totalValue, groupDescription, dat
                 group={groupName}
                 groupId={groupId}
                 index={index}
+                handleEditNegociacao = {handleEditNegociacao}
             />
         </Box>
     )

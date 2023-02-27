@@ -12,7 +12,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
     // styles we need to apply on draggables
     ...draggableStyle
 });
-const Negociacao = ({ negociacao, index }) => {
+const Negociacao = ({ negociacao, index, handleEditNegociacao }) => {
     const { name, description, Cliente, value, id } = negociacao
     return (
         <Draggable key={id} draggableId={id.toString()} index={index}  >
@@ -22,6 +22,7 @@ const Negociacao = ({ negociacao, index }) => {
                     flexDirection='column'
                     component={Paper}
                     elevation={2}
+                    onClick={() => handleEditNegociacao(id)}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}

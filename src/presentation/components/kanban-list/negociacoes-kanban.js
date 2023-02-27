@@ -2,11 +2,13 @@
 import { Box } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
-import { getNegociacoesByGroup, remoteUpdateNegociacaoUseCase } from '../../../domain/useCases/remote-negociacoes-useCase'
+import { getNegociacoesByGroup, remoteUpdateNegociacaoUseCase, remoteFetchNegociacaoUseCase } from '../../../domain/useCases/remote-negociacoes-useCase'
 import { GroupBox } from './group-box'
-
+import { NegociacaoModal } from '../negociacao-form/negociacao-modal'
 const NegociacoesKankanList = () => {
     const [data, setData] = useState([])
+    const [open, setOpen] = useState(false)
+    const [negociacaoSelected, setNegociacaoSelected] = useState(null)
     useEffect(() => {
         const fetchData = async () => {
             const response = await getNegociacoesByGroup()
@@ -14,6 +16,8 @@ const NegociacoesKankanList = () => {
         }
         fetchData()
     }, [])
+
+    const handleModal = () => setOpen((state) => !state)
 
     const onDragEnd = (result) => {
         const {
@@ -59,24 +63,33 @@ const NegociacoesKankanList = () => {
     const updateNegociacao = async (id, groupId) => {
         await remoteUpdateNegociacaoUseCase(id, { group_id: groupId })
     }
+    const editNegociacao = async (id) => {
+        const response = await remoteFetchNegociacaoUseCase(id)
+        setNegociacaoSelected(response)
+        handleModal()
+    }
     return (
-        <DragDropContext onDragEnd={onDragEnd}>
-            <Box
-                display='flex'
-                flexDirection={{ xs: 'column', md: 'row' }}
-            >
-                {data.map((item) => (
-                    <GroupBox
-                        key={item.id}
-                        groupName={item.name}
-                        totalValue={item.valueTotal}
-                        groupDescription={item.description}
-                        groupId={item.id}
-                        data={item.Negociacoes}
-                    />
-                ))}
-            </Box>
-        </DragDropContext>
+        <React.Fragment>
+            <DragDropContext onDragEnd={onDragEnd}>
+                <Box
+                    display='flex'
+                    flexDirection={{ xs: 'column', md: 'row' }}
+                >
+                    {data.map((item) => (
+                        <GroupBox
+                            key={item.id}
+                            groupName={item.name}
+                            totalValue={item.valueTotal}
+                            groupDescription={item.description}
+                            groupId={item.id}
+                            data={item.Negociacoes}
+                            handleEditNegociacao={editNegociacao}
+                        />
+                    ))}
+                </Box>
+            </DragDropContext>
+            <NegociacaoModal open={open} data={negociacaoSelected} handleModal={handleModal} />
+        </React.Fragment>
     )
 }
 

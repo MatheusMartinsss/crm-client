@@ -46,7 +46,6 @@ const colums = [
 export default function NegociacoesTable() {
     const { getNegociacoes, setNegociacoes } = useNegociacao()
     const [open, setOpen] = useState(false)
-    const [error, setError] = useState('')
     const [orderBy, setOrderBy] = useState('groupName')
     const [order, setOrder] = useState('asc')
     const [negociacao, setNegociacao] = useState(null)
@@ -62,24 +61,17 @@ export default function NegociacoesTable() {
     ))
     useEffect(() => {
         const fetchNegociacoes = async () => {
-            await remoteGetNegociacoesUseCase()
-                .then((response) => {
-                    setNegociacoes(response)
-                }).catch((error) => {
-                    setError(error)
-                })
+            const response = await remoteGetNegociacoesUseCase()
+            setNegociacoes(response)
         }
         fetchNegociacoes()
         // eslint-disable-next-line 
     }, [])
 
     const fetchNegociacao = async (id) => {
-        await remoteFetchNegociacaoUseCase(id)
-            .then((response) => {
-                setNegociacao(response)
-            }).finally(() => {
-                handleModal()
-            })
+        const response = await remoteFetchNegociacaoUseCase(id)
+        setNegociacao(response)
+        handleModal()
     }
 
     const handleModal = () => setOpen((state) => !state)

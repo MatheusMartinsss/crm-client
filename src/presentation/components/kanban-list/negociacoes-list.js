@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button } from '@mui/material';
+import { Box} from '@mui/material';
 import Negociacao from './negociacao';
 import { Droppable } from "react-beautiful-dnd";
 const getListStyle = isDraggingOver => ({
@@ -8,7 +8,7 @@ const getListStyle = isDraggingOver => ({
     minWidth: 350
 });
 
-const NegociacoesList = ({ negociacoes, group, index, groupId }) => {
+const NegociacoesList = ({ negociacoes, group, index, groupId, handleEditNegociacao }) => {
     return (
         <Droppable droppableId={groupId.toString()} key={index}>
             {(provided, snapshot) => (
@@ -24,6 +24,7 @@ const NegociacoesList = ({ negociacoes, group, index, groupId }) => {
                         <Negociacao
                             key={idx}
                             index={idx}
+                            handleEditNegociacao = {handleEditNegociacao}
                             negociacao={negociacao}
                         />
                     ))}
