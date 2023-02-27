@@ -1,17 +1,12 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { useTheme, styled } from '@mui/material/styles';
-import Popper from '@mui/material/Popper';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
 import SettingsIcon from '@mui/icons-material/Settings';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
-import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
-import ButtonBase from '@mui/material/ButtonBase';
-import InputBase from '@mui/material/InputBase';
-import Box from '@mui/material/Box';
+import { Box, InputBase, Autocomplete, autocompleteClasses, ButtonBase, ClickAwayListener, Popper } from '@mui/material'
 import { remoteListTagsUseCase } from '../../domain/useCases/remote-tags-useCase';
-import { Chip } from '@mui/material';
+import { Tag } from './tag';
 const StyledAutocompletePopper = styled('div')(({ theme }) => ({
     [`& .${autocompleteClasses.paper}`]: {
         boxShadow: 'none',
@@ -153,12 +148,12 @@ export default function AutoCompleteTagsAdd({ handleTag, initialValue }) {
                 </Button>
                 <Box display='flex' flexDirection='row' gap={0.5} >
                     {value.map((label) => (
-                        <Chip
+                        <Tag
                             label={label.name}
-                            color='primary'
-                            sx={{ backgroundColor: label.color }}
-                            onDelete={() => removeTag(label.id)}
+                            color={label.color}
+                            handleRemove={() => removeTag(label.id)}
                         />
+
                     ))}
                 </Box>
             </Box>

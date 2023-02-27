@@ -1,6 +1,7 @@
 import React from 'react'
 import { Box, Typography, Paper } from '@mui/material'
 import { Draggable } from "react-beautiful-dnd";
+import { Tag } from '../tag';
 const getItemStyle = (isDragging, draggableStyle) => ({
     // some basic styles to make the items look a bit nicer
     userSelect: "none",
@@ -13,7 +14,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
     ...draggableStyle
 });
 const Negociacao = ({ negociacao, index, handleEditNegociacao }) => {
-    const { name, description, Cliente, value, id } = negociacao
+    const { name, description, Cliente, value, id, Tags } = negociacao
     return (
         <Draggable key={id} draggableId={id.toString()} index={index}  >
             {(provided, snapshot) => (
@@ -35,6 +36,15 @@ const Negociacao = ({ negociacao, index, handleEditNegociacao }) => {
                     <Typography variant='subtitle1'>{description}</Typography>
                     <Typography variant='subtitle2'>{Cliente.name}</Typography>
                     <Typography variant='subtitle2'>R${value}</Typography>
+                    <Box
+                        flexDirection='row'
+                    >
+                        {Tags.map((item) => <Tag
+                            key={item.id}
+                            label={item.name}
+                            color={item.color}
+                        />)}
+                    </Box>
                 </Box>
             )}
         </Draggable>
