@@ -108,9 +108,7 @@ export default function NegociacoesTable() {
                                     align="left"
                                     onClick={() => handleSortChange(item.id)}
                                 >
-                                    <TableSortLabel
-                                        active={orderBy === item.id}
-                                    >
+                                    <TableSortLabel active={orderBy === item.id}>
                                         {item.label}
                                     </TableSortLabel>
                                 </TableCell>
