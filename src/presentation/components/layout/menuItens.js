@@ -3,5 +3,5 @@ export const menuItens = [{
     path: '/'
 }, {
     label: 'Clientes',
-    path: '/clientes'
+    path: 'clientes'
 }]
