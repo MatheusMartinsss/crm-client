@@ -2,20 +2,23 @@ import { AppBar, Box, Button, Stack, Toolbar, Typography } from '@mui/material'
 import React from 'react'
 import { logout } from '../../hooks/logout'
 import { useAuth } from '../../../domain/context/useAuth'
+
+const drawerWidth = 240
 const Header = () => {
     const { setUser, user } = useAuth()
     const handleLogout = () => {
         logout(setUser)
     }
     return (
-        <AppBar position='static'>
+        <AppBar position='fixed'
+            sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
+        >
             <Toolbar disableGutters >
                 <Box display='flex' justifyContent='space-between' flexGrow={1} padding={2}>
                     <Typography
                         variant='h6'
                         component='div'
                         noWrap
-
                     >
                         CRM-Client
                     </Typography>
