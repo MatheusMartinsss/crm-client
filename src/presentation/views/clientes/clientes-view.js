@@ -1,8 +1,7 @@
+import { useState } from "react"
 import { Box, ButtonGroup, Button } from "@mui/material"
 import { ClientesList } from "../../components/clientes-list/clientes-list"
-import { useState } from "react"
-import { ClienteForm } from "../../components/cliente-form/cliente-form"
-import { ModalForm } from "../../components/modal"
+import { ClienteModal } from "../../components/cliente-form/cliente-modal"
 export const ClientesView = () => {
     const [open, setOpen] = useState(false)
 
@@ -20,9 +19,7 @@ export const ClientesView = () => {
                 </ButtonGroup>
             </Box>
             <ClientesList />
-            <ModalForm open={open} handleModal={handleOpen}>
-                <ClienteForm />
-            </ModalForm>
+            <ClienteModal open={open} handleModal={handleOpen} />
         </Box>
     )
 }
