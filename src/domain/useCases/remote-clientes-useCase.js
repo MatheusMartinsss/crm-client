@@ -13,3 +13,15 @@ export const remoteListClientesUseCase = async () => {
         }
     }
 }
+export const remoteAddClienteUseCase = async (body) => {
+    try {
+        const response = await Api.post('/cliente', { ...body })
+        return response.data
+    } catch (error) {
+        switch (error.response.status) {
+            case httpStatusCode.badRequest: throw new ServerError()
+            case httpStatusCode.unauthorized: throw new UnauthorizedError()
+            default: throw new ServerError()
+        }
+    }
+}
