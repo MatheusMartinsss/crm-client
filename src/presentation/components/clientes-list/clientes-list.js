@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton } from '@mui/material'
 import { remoteListClientesUseCase } from '../../../domain/useCases/remote-clientes-useCase'
+import { useCliente } from '../../../domain/context/cliente-context';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 const colums = [
     {
@@ -24,15 +25,16 @@ const colums = [
     }
 ]
 
-
 export const ClientesList = () => {
-    const [data, setData] = useState([])
+    const { getClientes, setClientes } = useCliente()
+    let data = getClientes()
     useEffect(() => {
         const fetchClientes = async () => {
             const response = await remoteListClientesUseCase()
-            setData(response)
+            setClientes(response)
         }
         fetchClientes()
+        // eslint-disable-next-line
     }, [])
     return (
         <React.Fragment>

@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { remoteAddClienteUseCase } from '../../../domain/useCases/remote-clientes-useCase';
+import { useCliente } from '../../../domain/context/cliente-context';
 const schema = yup.object({
     id: yup.mixed(),
     name: yup.string().required('Nome Obrigatorio!.').matches(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/, 'Nome invalido!'),
@@ -17,10 +18,11 @@ export const ClienteForm = ({ handleModal }) => {
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
     })
+    const { addCliente } = useCliente()
     const handleForm = async (data) => {
-        console.log(data)
         await remoteAddClienteUseCase(data).then((response) => {
-            console.log(response)
+            addCliente(response)
+            handleModal()
         })
     }
     return (
