@@ -4,4 +4,7 @@ export const menuItens = [{
 }, {
     label: 'Clientes',
     path: 'clientes'
+}, {
+    label: 'Grupos',
+    path: 'grupos'
 }]

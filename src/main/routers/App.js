@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { loadToken, setToken } from "../../presentation/hooks/acess-token";
 import { validateTokenUseCase } from "../../domain/useCases/remote-auth-useCase";
 import { logout } from "../../presentation/hooks/logout";
-import { MakeAuthView, MakeClienteView, MakeHomeView } from './useCases/'
+import { MakeAuthView, MakeClienteView, MakeHomeView, MakeGroupView } from './useCases/'
 import { CssBaseline } from "@mui/material";
 import Layout from "../../presentation/components/layout/layout";
 function App() {
@@ -34,6 +34,7 @@ function App() {
           <Route element={<ProtectedRoute isAllowed={!!user} />}>
             <Route path="/" element={<MakeHomeView />} />
             <Route path='/clientes' element={<MakeClienteView />} />
+            <Route path="/grupos" element={<MakeGroupView />} />
           </Route>
           <Route>
             <Route element={<RestrictedRoute user={user} />}>
