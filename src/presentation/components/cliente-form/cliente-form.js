@@ -20,10 +20,9 @@ export const ClienteForm = ({ handleModal }) => {
     })
     const { addCliente } = useCliente()
     const handleForm = async (data) => {
-        await remoteAddClienteUseCase(data).then((response) => {
-            addCliente(response)
-            handleModal()
-        })
+        const response = await remoteAddClienteUseCase(data)
+        addCliente(response)
+        handleModal()
     }
     return (
         <Grid container spacing={2} component='form' onSubmit={handleSubmit(handleForm)}>
