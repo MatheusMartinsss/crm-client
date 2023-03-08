@@ -13,3 +13,14 @@ export const remoteListGroupsUseCase = async () => {
         }
     }
 }
+export const remoteAddGroupUseCase = async (body) => {
+    try {
+        const response = await Api.post('/group', { ...body })
+        return response.data
+    } catch (error) {
+        switch (error.response.status) {
+            case httpStatusCode.unauthorized: throw new UnauthorizedError()
+            default: throw new ServerError()
+        }
+    }
+}
