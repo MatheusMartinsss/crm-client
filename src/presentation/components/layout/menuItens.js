@@ -7,4 +7,7 @@ export const menuItens = [{
 }, {
     label: 'Grupos',
     path: 'grupos'
+},{
+    label: 'Usuarios',
+    path: 'users'
 }]
