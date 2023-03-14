@@ -1,41 +1,24 @@
-import { Box, Drawer, CssBaseline, Toolbar, ListItem, ListItemButton, ListItemText } from "@mui/material";
-import React from "react";
+import { Box, CssBaseline, Toolbar } from "@mui/material";
+import React, { useState } from "react";
 import { useAuth } from "../../../domain/context/useAuth";
 import Header from "./header";
-import { menuItens } from './menuItens'
-import { useNavigate } from "react-router-dom";
-const drawerWidth = 240
+import { Sidebar } from "./sidebar";
+
+
 const Layout = ({ children }) => {
-    const navigate = useNavigate()
     const { user } = useAuth()
+
+    const [open, setOpen] = useState(false)
+    const handleOpen = () => setOpen((state) => !state)
 
     return user ?
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <Header />
-            <Drawer
-                sx={{
-                    width: drawerWidth,
-                    flexShrink: 0,
-                    '& .MuiDrawer-paper': {
-                        width: drawerWidth,
-                        boxSizing: 'border-box',
-                    },
-                }}
-                variant="permanent"
-                anchor="left"
-            >
-                {menuItens.map((item, idx) => (
-                    <ListItem key={idx}>
-                        <ListItemButton onClick={() => navigate(item.path)} >
-                            <ListItemText>{item.label}</ListItemText>
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </Drawer>
+            <Header open={open} />
+            <Sidebar open={open} handleDrawer={handleOpen} />
             <Box
                 component='main'
-                sx={{ flexGrow: 1, p: 3 }}>
+                sx={{  flexGrow: 1, p: 3 }}>
                 <Toolbar />
                 {children}
             </Box>

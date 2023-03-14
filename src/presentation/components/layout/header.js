@@ -1,18 +1,20 @@
-import { AppBar, Box, Button, Stack, Toolbar, Typography } from '@mui/material'
+import { Box, Button, Stack, Toolbar, Typography } from '@mui/material'
 import React from 'react'
 import { logout } from '../../hooks/logout'
 import { useAuth } from '../../../domain/context/useAuth'
+import { styled } from '@mui/material/styles';
+import MuiAppBar from '@mui/material/AppBar';
 
-const drawerWidth = 240
-const Header = () => {
+
+const AppBar = styled(MuiAppBar)(() => ({
+    width: `calc(100% - 80px)`,
+}));
+const Header = ({ open }) => {
     const { setUser, user } = useAuth()
-    const handleLogout = () => {
-        logout(setUser)
-    }
+    const handleLogout = () => logout(setUser)
+
     return (
-        <AppBar position='fixed'
-            sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
-        >
+        <AppBar position="fixed" open={open}>
             <Toolbar disableGutters >
                 <Box display='flex' justifyContent='space-between' flexGrow={1} padding={2}>
                     <Typography
