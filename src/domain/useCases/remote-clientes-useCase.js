@@ -25,3 +25,27 @@ export const remoteAddClienteUseCase = async (body) => {
         }
     }
 }
+export const remoteUpdateClienteUseCase = async (id, body) => {
+    try {
+        const response = await Api.put(`/cliente/${id}`, { ...body })
+        return response.data
+    } catch (error) {
+        switch (error.response.status) {
+            case httpStatusCode.badRequest: throw new ServerError()
+            case httpStatusCode.unauthorized: throw new UnauthorizedError()
+            default: throw new ServerError()
+        }
+    }
+}
+export const remotefetchClienteUseCase = async (id) => {
+    try {
+        const response = await Api.get(`/cliente/${id}`)
+        return response.data
+    } catch (error) {
+        switch (error.response.status) {
+            case httpStatusCode.badRequest: throw new ServerError()
+            case httpStatusCode.unauthorized: throw new UnauthorizedError()
+            default: throw new ServerError()
+        }
+    }
+}

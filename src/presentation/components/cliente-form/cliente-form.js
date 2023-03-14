@@ -3,26 +3,43 @@ import { Button, Grid, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
-import { remoteAddClienteUseCase } from '../../../domain/useCases/remote-clientes-useCase';
+import { remoteAddClienteUseCase, remoteUpdateClienteUseCase } from '../../../domain/useCases/remote-clientes-useCase';
 import { useCliente } from '../../../domain/context/cliente-context';
 const schema = yup.object({
     id: yup.mixed(),
-    name: yup.string().required('Nome Obrigatorio!.').matches(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/, 'Nome invalido!'),
-    lastname: yup.string().required('Nome Obrigatorio!.').matches(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/, 'Sobre nome invalido!'),
+    name: yup.string().required('Nome Obrigatorio!.'),
+    lastname: yup.string().required('Nome Obrigatorio!.'),
     email: yup.string().email('Email invalido!').required(),
     phonenumber: yup.string(),
     cpf: yup.string().required(),
 })
 
-export const ClienteForm = ({ handleModal }) => {
+export const ClienteForm = ({ handleModal, data }) => {
     const { register, handleSubmit, formState: { errors } } = useForm({
-        resolver: yupResolver(schema)
+        resolver: yupResolver(schema),
+        defaultValues: data
     })
-    const { addCliente } = useCliente()
-    const handleForm = async (data) => {
-        const response = await remoteAddClienteUseCase(data)
-        addCliente(response)
+    let editMode = !!data
+    const { addCliente, updateCliente } = useCliente()
+    const handleForm = async (form) => {
+        if (editMode) {
+            const newValue = getOnlyEditedFields(data, form)
+            const response = await remoteUpdateClienteUseCase(form.id, newValue)
+            updateCliente(form.id, response)
+        } else {
+            const response = await remoteAddClienteUseCase(form)
+            addCliente(response)
+        }
         handleModal()
+    }
+    const getOnlyEditedFields = (initialValue, value) => {
+        let editedFields = {}
+        for (let field in initialValue) {
+            if (initialValue[field] !== value[field]) {
+                editedFields = { ...editedFields, [field]: value[field] }
+            }
+        }
+        return editedFields
     }
     return (
         <Grid container spacing={2} component='form' onSubmit={handleSubmit(handleForm)}>

@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton } from '@mui/material'
-import { remoteListClientesUseCase } from '../../../domain/useCases/remote-clientes-useCase'
+import { remoteListClientesUseCase, remotefetchClienteUseCase } from '../../../domain/useCases/remote-clientes-useCase'
 import { useCliente } from '../../../domain/context/cliente-context';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { ClienteModal } from '../cliente-form/cliente-modal';
 const colums = [
     {
         id: 'name',
@@ -27,6 +28,8 @@ const colums = [
 
 export const ClientesList = () => {
     const { getClientes, setClientes } = useCliente()
+    const [clientSelected, setClienteSelected] = useState({})
+    const [open, setOpen] = useState(false)
     let data = getClientes()
     useEffect(() => {
         const fetchClientes = async () => {
@@ -36,6 +39,12 @@ export const ClientesList = () => {
         fetchClientes()
         // eslint-disable-next-line
     }, [])
+    const fetchCliente = async (id) => {
+        const response = await remotefetchClienteUseCase(id)
+        setClienteSelected(response)
+        handleModal()
+    }
+    const handleModal = () => setOpen((state) => !state)
     return (
         <React.Fragment>
             <TableContainer>
@@ -56,7 +65,7 @@ export const ClientesList = () => {
                                 <TableCell>{item.phonenumber}</TableCell>
                                 <TableCell>{item.cpf}</TableCell>
                                 <TableCell align="left">
-                                    <IconButton >
+                                    <IconButton onClick={() => fetchCliente(item.id)} >
                                         <VisibilityIcon />
                                     </IconButton>
                                 </TableCell>
@@ -65,6 +74,7 @@ export const ClientesList = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <ClienteModal open={open} handleModal={handleModal} data={clientSelected} />
         </React.Fragment>
     )
 }
