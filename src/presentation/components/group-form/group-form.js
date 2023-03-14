@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { remoteAddGroupUseCase, remoteUpdateGroupUseCase } from '../../../domain/useCases/remote-groups-useCase';
-
+import { useGroup } from '../../../domain/context/group-context';
 const schema = yup.object({
     id: yup.mixed(),
     name: yup.string().required('Nome Obrigatorio!.'),
@@ -16,13 +16,16 @@ export const GroupForm = ({ handleModal, data }) => {
         resolver: yupResolver(schema),
         defaultValues: data
     })
+    const { addGroup, updateGroup } = useGroup()
     let editMode = !!data
     const handleForm = async (form) => {
         if (editMode) {
             const newValue = getOnlyEditedFields(data, form)
-            await remoteUpdateGroupUseCase(form.id, newValue)
+            const response = await remoteUpdateGroupUseCase(form.id, newValue)
+            updateGroup(form.id, response)
         } else {
-            await remoteAddGroupUseCase(form)
+            const response = await remoteAddGroupUseCase(form)
+            addGroup(response)
         }
         handleModal()
     }

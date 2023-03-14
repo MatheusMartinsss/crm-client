@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { remoteListGroupsUseCase, remoteFetchGroupUseCase } from '../../../domain/useCases/remote-groups-useCase'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { GroupModal } from '../group-form/group-modal';
+import { useGroup } from '../../../domain/context/group-context';
 const colums = [
     {
         id: 'name',
@@ -17,15 +18,17 @@ const colums = [
 ]
 
 export const GroupsList = () => {
-    const [data, setData] = useState([])
+    const { getGroups, setGroups } = useGroup()
+    let data = getGroups()
     const [groupSelected, setGroupSelected] = useState(null)
     const [open, setOpen] = useState(false)
     useEffect(() => {
         const fetchData = async () => {
             const response = await remoteListGroupsUseCase()
-            setData(response)
+            setGroups(response)
         }
         fetchData()
+        // eslint-disable-next-line
     }, [])
     const fetchGroup = async (id) => {
         const response = await remoteFetchGroupUseCase(id)
