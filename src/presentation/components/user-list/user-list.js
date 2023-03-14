@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Table, TableContainer, TableHead, TableRow, TableCell, TableBody } from '@mui/material'
-import { remoteFetchUsers } from '../../../domain/useCases/remote-user-useCase'
-
+import { Table, TableContainer, TableHead, TableRow, TableCell, TableBody, IconButton } from '@mui/material'
+import { remoteFetchUsers, remoteFetchUser } from '../../../domain/useCases/remote-user-useCase'
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { UserModal } from '../user-form/user-modal';
+import { useUsers } from '../../../domain/context/users-context';
 const colums = [
     {
         id: 'name',
@@ -9,37 +11,59 @@ const colums = [
     }, {
         id: 'email',
         label: 'Email'
+    }, {
+        id: 'options',
+        label: 'Opções'
     }
 ]
 
 export const UserList = () => {
-    const [data, setData] = useState([])
+    const [userSelected, setUserSelected] = useState(null)
+    const [open, setOpen] = useState(false)
+    const { getUsers, setUsers } = useUsers()
+    let data = getUsers()
     useEffect(() => {
         const fetchData = async () => {
             const response = await remoteFetchUsers()
-            setData(response)
+            setUsers(response)
         }
         fetchData()
+        // eslint-disable-next-line
     }, [])
+
+    const fetchUser = async (id) => {
+        const response = await remoteFetchUser(id)
+        setUserSelected(response)
+        handleModal()
+    }
+    const handleModal = () => setOpen((state) => !state)
     return (
-        <TableContainer>
-            <Table sx={{ minWidth: 650, borderRadius: 5, border: 2, borderColor: '#A4D3EE' }}>
-                <TableHead>
-                    <TableRow>
-                        {colums.map((item, idx) => (
-                            <TableCell key={idx}>{item.label}</TableCell>
-                        ))}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {data.map((item) => (
+        <React.Fragment>
+            <TableContainer>
+                <Table sx={{ minWidth: 650, borderRadius: 5, border: 2, borderColor: '#A4D3EE' }}>
+                    <TableHead>
                         <TableRow>
-                            <TableCell>{item.name}</TableCell>
-                            <TableCell>{item.email}</TableCell>
+                            {colums.map((item, idx) => (
+                                <TableCell key={idx}>{item.label}</TableCell>
+                            ))}
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+                    </TableHead>
+                    <TableBody>
+                        {data.map((item) => (
+                            <TableRow>
+                                <TableCell>{item.name}</TableCell>
+                                <TableCell>{item.email}</TableCell>
+                                <TableCell align="left">
+                                    <IconButton onClick={() => fetchUser(item.id)} >
+                                        <VisibilityIcon />
+                                    </IconButton>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <UserModal handleModal={handleModal} open={open} data={userSelected} />
+        </React.Fragment>
     )
 }

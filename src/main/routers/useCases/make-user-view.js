@@ -1,3 +1,7 @@
 import { UserView } from "../../../presentation/views";
-
-export const MakeUserView = () => <UserView />
+import UseUsersProvider from "../../../domain/context/users-context";
+export const MakeUserView = () => (
+    <UseUsersProvider>
+        <UserView />
+    </UseUsersProvider>
+) 

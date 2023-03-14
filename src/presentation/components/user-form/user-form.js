@@ -3,22 +3,42 @@ import { Button, Grid, MenuItem, Select, TextField } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
-import { remoteAddUser } from '../../../domain/useCases/remote-user-useCase';
+import { remoteAddUser, remoteUpdateUser } from '../../../domain/useCases/remote-user-useCase';
+import { useUsers } from '../../../domain/context/users-context';
 const schema = yup.object({
     id: yup.mixed(),
-    name: yup.string().required('Nome Obrigatorio!.').matches(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/, 'Nome invalido!'),
+    name: yup.string().required('Nome Obrigatorio!.'),
     email: yup.string().required('Email Obrigatorio!.'),
     password: yup.string().required(),
     role: yup.string()
 })
 
-export const UserForm = ({ handleModal }) => {
+export const UserForm = ({ handleModal, data }) => {
     const { register, handleSubmit, formState: { errors }, control } = useForm({
-        resolver: yupResolver(schema)
+        resolver: yupResolver(schema),
+        defaultValues: data
     })
-    const handleForm = async (data) => {
-        const response = await remoteAddUser(data)
+    let editMode = !!data
+    const { updateUsers, addUsers } = useUsers()
+    const handleForm = async (form) => {
+        if (editMode) {
+            const newValue = getOnlyEditedFields(data, form)
+            const response = await remoteUpdateUser(form.id, newValue)
+            updateUsers(form.id, response)
+        } else {
+            const response = await remoteAddUser(form)
+            addUsers(response)
+        }
         handleModal()
+    }
+    const getOnlyEditedFields = (initialValue, value) => {
+        let editedFields = {}
+        for (let field in initialValue) {
+            if (initialValue[field] !== value[field]) {
+                editedFields = { ...editedFields, [field]: value[field] }
+            }
+        }
+        return editedFields
     }
     return (
         <Grid container spacing={2} component='form' onSubmit={handleSubmit(handleForm)} >

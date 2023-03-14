@@ -1,7 +1,7 @@
 import React from 'react'
 import { Dialog, DialogContent } from '@mui/material'
 import { UserForm } from './user-form'
-export const UserModal = ({ open, handleModal }) => {
+export const UserModal = ({ open, handleModal, data }) => {
     return (
         <React.Fragment>
             <Dialog
@@ -9,7 +9,7 @@ export const UserModal = ({ open, handleModal }) => {
                 onClose={handleModal}
             >
                 <DialogContent>
-                    <UserForm handleModal={handleModal} />
+                    <UserForm handleModal={handleModal} data={data} />
                 </DialogContent>
             </Dialog>
         </React.Fragment>
