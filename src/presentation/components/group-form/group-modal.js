@@ -1,7 +1,7 @@
 import React from 'react'
 import { Dialog, DialogContent } from '@mui/material'
 import { GroupForm } from './group-form'
-export const GroupModal = ({ open, handleModal }) => {
+export const GroupModal = ({ open, handleModal, data }) => {
     return (
         <React.Fragment>
             <Dialog
@@ -9,7 +9,7 @@ export const GroupModal = ({ open, handleModal }) => {
                 onClose={handleModal}
             >
                 <DialogContent>
-                    <GroupForm handleModal={handleModal} />
+                    <GroupForm handleModal={handleModal} data = {data} />
                 </DialogContent>
             </Dialog>
         </React.Fragment>
