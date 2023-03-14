@@ -6,16 +6,16 @@ export const GroupBox = ({ groupName, groupId, totalValue, groupDescription, dat
         <Box
             display='flex'
             flexDirection='column'
-            minWidth='350px'
+            width='400px'
+            bgcolor='#F5F5F5'
         >
             <Box
                 display='flex'
                 padding='5px'
-                bgcolor='#F5F5F5'
-                height='80px'
+                height='60px'
                 flexDirection='column'
             >
-                <Typography align='left' variant="h5">{groupName}</Typography>
+                <Typography sx={{ fontWeight: '700' }} align='left' variant="subtitle1">{groupName}</Typography>
                 <Typography variant="subtitle1">R${totalValue} - {data.length} Negociacoes</Typography>
             </Box>
             <NegociacoesList

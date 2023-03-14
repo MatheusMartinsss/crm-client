@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Typography, Paper } from '@mui/material'
+import { Box, Typography, Paper, Avatar, Stack } from '@mui/material'
 import { Draggable } from "react-beautiful-dnd";
 import { Tag } from '../tag';
 const getItemStyle = (isDragging, draggableStyle) => ({
@@ -14,7 +14,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
     ...draggableStyle
 });
 const Negociacao = ({ negociacao, index, handleEditNegociacao }) => {
-    const { name, description, Cliente, value, id, Tags } = negociacao
+    const { name, Cliente, value, id, Tags } = negociacao
     return (
         <Draggable key={id} draggableId={id.toString()} index={index}  >
             {(provided, snapshot) => (
@@ -22,7 +22,7 @@ const Negociacao = ({ negociacao, index, handleEditNegociacao }) => {
                     display='flex'
                     flexDirection='column'
                     component={Paper}
-                    elevation={2}
+                    elevation={1}
                     onClick={() => handleEditNegociacao(id)}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
@@ -32,19 +32,14 @@ const Negociacao = ({ negociacao, index, handleEditNegociacao }) => {
                         provided.draggableProps.style
                     )}
                 >
-                    <Typography variant='h6'>{name}</Typography>
-                    <Typography variant='subtitle1'>{description}</Typography>
-                    <Typography variant='subtitle2'>{Cliente.name}</Typography>
-                    <Typography variant='subtitle2'>R${value}</Typography>
-                    <Box
-                        flexDirection='row'
-                    >
-                        {Tags.map((item) => <Tag
-                            key={item.id}
-                            label={item.name}
-                            color={item.color}
-                        />)}
-                    </Box>
+                    <Typography gutterBottom sx={{ fontWeight: '550' }} textOverflow='ellipsis' overflow='clip' variant='h6'>{name}</Typography>
+                    <Stack display='flex' flexDirection='row' justifyContent='space-between' alignItems='center'>
+                        <Stack display='flex' flexDirection='row' alignItems='center' gap={0.5}>
+                            <Avatar sx={{ width: 24, height: 24 }} />
+                            <Typography variant='subtitle2'>{Cliente.name}</Typography>
+                        </Stack>
+                        <Typography variant='subtitle2'>R${value}</Typography>
+                    </Stack>
                 </Box>
             )}
         </Draggable>

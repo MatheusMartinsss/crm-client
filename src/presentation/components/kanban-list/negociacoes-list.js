@@ -5,7 +5,7 @@ import { Droppable } from "react-beautiful-dnd";
 const getListStyle = isDraggingOver => ({
     background: isDraggingOver ? "lightblue" : "#F5F5F5",
     padding: 5,
-    minWidth: 350
+    width: 400,
 });
 
 const NegociacoesList = ({ negociacoes, group, index, groupId, handleEditNegociacao }) => {

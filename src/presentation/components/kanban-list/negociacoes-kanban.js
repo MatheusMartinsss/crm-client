@@ -74,6 +74,7 @@ const NegociacoesKankanList = () => {
                 <Box
                     display='flex'
                     flexDirection={{ xs: 'column', md: 'row' }}
+                    gap = {1}
                 >
                     {data.map((item) => (
                         <GroupBox
