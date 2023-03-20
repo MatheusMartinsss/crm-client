@@ -5,21 +5,29 @@ import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { remoteAddClienteUseCase, remoteUpdateClienteUseCase } from '../../../domain/useCases/remote-clientes-useCase';
 import { useCliente } from '../../../domain/context/cliente-context';
+
+
 const schema = yup.object({
     id: yup.mixed(),
     name: yup.string().required('Nome Obrigatorio!.'),
     lastname: yup.string().required('Nome Obrigatorio!.'),
     email: yup.string().email('Email invalido!').required(),
     phonenumber: yup.string(),
+    location: yup.object().shape({
+        estado: yup.string(),
+        uf: yup.string(),
+        cidade: yup.string(),
+    }),
     cpf: yup.string().required(),
 })
 
 export const ClienteForm = ({ handleModal, data }) => {
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
         defaultValues: data
     })
     let editMode = !!data
+
     const { addCliente, updateCliente } = useCliente()
     const handleForm = async (form) => {
         if (editMode) {
@@ -32,6 +40,7 @@ export const ClienteForm = ({ handleModal, data }) => {
         }
         handleModal()
     }
+
     const getOnlyEditedFields = (initialValue, value) => {
         let editedFields = {}
         for (let field in initialValue) {
@@ -87,6 +96,9 @@ export const ClienteForm = ({ handleModal, data }) => {
                     error={!!errors.cpf}
                     helperText={errors.cpf?.message}
                 />
+            </Grid>
+            <Grid item xs={12}>
+               
             </Grid>
             <Grid item xs={6}>
                 <Button onClick={handleModal} fullWidth variant='contained' color='error'>Cancelar</Button>
