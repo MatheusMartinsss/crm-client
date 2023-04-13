@@ -8,6 +8,7 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3000
+ENV REACT_APP_PORT $REACT_APP_PORT
+EXPOSE $REACT_APP_PORT
 
 CMD ["npm", "run", "build"]
