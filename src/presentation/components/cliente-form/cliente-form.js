@@ -5,7 +5,7 @@ import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { remoteAddClienteUseCase, remoteUpdateClienteUseCase } from '../../../domain/useCases/remote-clientes-useCase';
 import { useCliente } from '../../../domain/context/cliente-context';
-
+import LocationSelect from '../locationSelect';
 
 const schema = yup.object({
     id: yup.mixed(),
@@ -22,12 +22,12 @@ const schema = yup.object({
 })
 
 export const ClienteForm = ({ handleModal, data }) => {
-    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({
+    const { register, handleSubmit, setValue, getValues, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
         defaultValues: data
     })
     let editMode = !!data
-
+    let location = getValues('location')
     const { addCliente, updateCliente } = useCliente()
     const handleForm = async (form) => {
         if (editMode) {
@@ -49,6 +49,10 @@ export const ClienteForm = ({ handleModal, data }) => {
             }
         }
         return editedFields
+    }
+    const handleLocation = (props) => {
+        let newValue = { estado: props?.estado?.nome, uf: props?.estado?.sigla, cidade: props.cidade }
+        setValue('location', newValue)
     }
     return (
         <Grid container spacing={2} component='form' onSubmit={handleSubmit(handleForm)}>
@@ -98,7 +102,7 @@ export const ClienteForm = ({ handleModal, data }) => {
                 />
             </Grid>
             <Grid item xs={12}>
-               
+                <LocationSelect handleLocation={handleLocation} initialValue={location} />
             </Grid>
             <Grid item xs={6}>
                 <Button onClick={handleModal} fullWidth variant='contained' color='error'>Cancelar</Button>
@@ -106,6 +110,6 @@ export const ClienteForm = ({ handleModal, data }) => {
             <Grid item xs={6}>
                 <Button type='submit' fullWidth variant='contained' color='success'>Confirmar</Button>
             </Grid>
-        </Grid>
+        </Grid >
     )
 }
