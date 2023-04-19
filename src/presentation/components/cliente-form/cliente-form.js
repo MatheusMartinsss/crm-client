@@ -1,6 +1,6 @@
 import React from 'react'
-import { Button, Grid, TextField } from '@mui/material'
-import { useForm } from 'react-hook-form'
+import { Button, Grid, TextField, Radio, RadioGroup, FormControlLabel, FormLabel, FormControl } from '@mui/material'
+import { Controller, useForm } from 'react-hook-form'
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { remoteAddClienteUseCase, remoteUpdateClienteUseCase } from '../../../domain/useCases/remote-clientes-useCase';
@@ -13,6 +13,7 @@ const schema = yup.object({
     lastname: yup.string().required('Nome Obrigatorio!.'),
     email: yup.string().email('Email invalido!').required(),
     phonenumber: yup.string(),
+    pessoa_tipo: yup.string(),
     location: yup.object().shape({
         estado: yup.string(),
         uf: yup.string(),
@@ -22,7 +23,7 @@ const schema = yup.object({
 })
 
 export const ClienteForm = ({ handleModal, data }) => {
-    const { register, handleSubmit, setValue, getValues, formState: { errors } } = useForm({
+    const { register, handleSubmit, setValue, getValues, control, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
         defaultValues: data
     })
@@ -51,7 +52,7 @@ export const ClienteForm = ({ handleModal, data }) => {
         return editedFields
     }
     const handleLocation = (props) => {
-        let newValue = { estado: props?.estado?.nome, uf: props?.estado?.sigla, cidade: props.cidade }
+        let newValue = { estado: props?.estado?.nome, uf: props?.estado?.sigla, cidade: props?.cidade }
         setValue('location', newValue)
     }
     return (
@@ -74,6 +75,38 @@ export const ClienteForm = ({ handleModal, data }) => {
                     helperText={errors.lastname?.message}
                 />
             </Grid>
+            <Grid item xs={12}>
+                <FormControl>
+                    <FormLabel id="demo-row-radio-buttons-group-label">Tipo</FormLabel>
+                    <Controller
+                        control={control}
+                        name='pessoa_tipo'
+                        render={({ field: { onChange, ...props } }) => (
+                            <RadioGroup
+                                row
+                                onChange={e => onChange(e.target.value)}
+                                {...props}
+                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                name="row-radio-buttons-group"
+                            >
+                                <FormControlLabel value="fisica" control={<Radio />} label="Fisica" />
+                                <FormControlLabel value="juridica" control={<Radio />} label="Juridica" />
+                            </RadioGroup>
+                        )}
+                    >
+
+                    </Controller>
+                </FormControl>
+            </Grid>
+            <Grid item xs={12} md={12}>
+                <TextField
+                    {...register('cpf')}
+                    fullWidth
+                    placeholder='CPF'
+                    error={!!errors.cpf}
+                    helperText={errors.cpf?.message}
+                />
+            </Grid>
             <Grid item xs={12} md={12}>
                 <TextField
                     {...register('email')}
@@ -92,14 +125,28 @@ export const ClienteForm = ({ handleModal, data }) => {
                     helperText={errors.phonenumber?.message}
                 />
             </Grid>
-            <Grid item xs={12} md={12}>
-                <TextField
-                    {...register('cpf')}
-                    fullWidth
-                    placeholder='CPF'
-                    error={!!errors.cpf}
-                    helperText={errors.cpf?.message}
-                />
+            <Grid item xs={12}>
+                <FormControl>
+                    <FormLabel id="demo-row-radio-buttons-group-label">Tamanho da Empresa</FormLabel>
+                    <Controller
+                        control={control}
+                        name='empresa_tamanho'
+                        render={({ field: { onChange, ...props } }) => (
+                            <RadioGroup
+                                row
+                                onChange={e => onChange(e.target.value)}
+                                {...props}
+                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                name="row-radio-buttons-group"
+                            >
+                                <FormControlLabel value="pequena" control={<Radio />} label="pequena" />
+                                <FormControlLabel value="media" control={<Radio />} label="media" />
+                                <FormControlLabel value="grande" control={<Radio />} label="grande" />
+                            </RadioGroup>
+                        )}
+                    >
+                    </Controller>
+                </FormControl>
             </Grid>
             <Grid item xs={12}>
                 <LocationSelect handleLocation={handleLocation} initialValue={location} />
