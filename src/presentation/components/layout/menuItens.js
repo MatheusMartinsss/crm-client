@@ -9,15 +9,15 @@ export const menuItens = [
         icon: <BookmarksIcon />
     }, {
         label: 'Clientes',
-        path: 'clientes',
+        path: '/clientes',
         icon: <GroupsIcon />
     }, {
         label: 'Grupos',
-        path: 'grupos',
+        path: '/grupos',
         icon: <GridViewIcon />
     }, {
         label: 'Usuarios',
-        path: 'users',
+        path: '/users',
         icon: <ManageAccountsIcon />
     }
 ]
