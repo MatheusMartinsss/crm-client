@@ -1,74 +1,55 @@
 
 import React from 'react'
-import { styled } from '@mui/material/styles';
-import MuiDrawer from '@mui/material/Drawer';
-import { ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+
+import { Box, Divider, ListItemIcon, ListItem, ListItemButton, ListItemText, Paper, Typography } from "@mui/material";
 import { menuItens } from './menuItens'
+import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
-const drawerWidth = 240
 
-const openedMixin = (theme) => ({
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-    }),
-    overflowX: 'hidden',
-});
 
-const closedMixin = (theme) => ({
-    transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: 'hidden',
-    width: `80px`,
 
-});
-
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-    ({ theme, open }) => ({
-        width: drawerWidth,
-        flexShrink: 0,
-        display: 'flex',
-        whiteSpace: 'nowrap',
-        boxSizing: 'border-box',
-        ...(open && {
-            ...openedMixin(theme),
-            '& .MuiDrawer-paper': openedMixin(theme),
-        }),
-        ...(!open && {
-            ...closedMixin(theme),
-            '& .MuiDrawer-paper': closedMixin(theme),
-        }),
-    }),
-);
-
-export const Sidebar = ({ open, handleDrawer }) => {
+export const Sidebar = () => {
     const navigate = useNavigate()
     return (
-        <Drawer
-            variant='permanent'
-            open={open}
-            onPointerEnter={handleDrawer}
-            onPointerLeave={handleDrawer}
+        <Box
+            sx={{ display: 'flex' }}
         >
-            {menuItens.map((item, idx) => (
-                <ListItem key={idx}>
-                    <ListItemButton onClick={() => navigate(item.path)} >
-                        {open ? (
-                            <>
-                                <ListItemIcon>{item.icon}</ListItemIcon>
-                                <ListItemText>{item.label}</ListItemText>
-                            </>
-                        ) : (
-                            <>
-                                <ListItemIcon>{item.icon}</ListItemIcon>
-                            </>
-                        )}
-                    </ListItemButton>
-                </ListItem>
-            ))}
-        </Drawer>
+            <ThemeProvider
+                theme={createTheme({
+                    components: {
+                        MuiListItemButton: {
+                            defaultProps: {
+                                disableTouchRipple: true,
+                            },
+                        },
+                    },
+                    palette: {
+                        mode: 'dark',
+                        primary: { main: 'rgb(102, 157, 246)' },
+                        background: { paper: 'rgb(5, 30, 52)' },
+                    },
+                })}
+            >
+                <Paper elevation={0} sx={{ maxWidth: 300, minHeight: '100vh', flexDirection: 'column' }}>
+                    <Box sx={{ padding: 2, textAlign: 'center' }}>
+                        <Typography fontSize={20} fontWeight='medium'>CRM-Client</Typography>
+                    </Box>
+                    <Divider />
+                    {menuItens.map((item, idx) => (
+                        <ListItem key={idx} >
+                            <ListItemButton
+                                sx={{ py: 0, minHeight: 32, color: 'rgba(255,255,255,.8)' }}
+                                onClick={() => navigate(item.path)} >
+                                <ListItemIcon sx={{ color: 'inherit' }}>
+                                    {item.icon}
+                                </ListItemIcon>
+                                <ListItemText primary={item.label}
+                                    primaryTypographyProps={{ fontSize: 14, fontWeight: 'medium', color: 'white' }}>{item.label}</ListItemText>
+                            </ListItemButton>
+                        </ListItem>
+                    ))}
+                </Paper>
+            </ThemeProvider>
+        </Box>
     )
 }
