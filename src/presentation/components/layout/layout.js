@@ -18,7 +18,7 @@ const Layout = ({ children }) => {
             <Sidebar open={open} handleDrawer={handleOpen} />
             <Box
                 component='main'
-                sx={{  flexGrow: 1, p: 3 }}>
+                sx={{  flex: 1, p: 3 }}>
                 <Toolbar />
                 {children}
             </Box>
