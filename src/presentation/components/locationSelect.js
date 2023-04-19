@@ -36,7 +36,7 @@ const LocationSelect = ({ handleLocation, initialValue }) => {
                 <Autocomplete
                     options={estados}
                     value={location.estado || null}
-                    getOptionLabel={(option) => option.nome || option}
+                    getOptionLabel={(option) => option.nome || ''}
                     isOptionEqualToValue={(option, value) => option.sigla === value.sigla}
                     onChange={(_, newValue) => {
                         setLocation((state) => ({ ...state, estado: newValue, cidade: '' }))
