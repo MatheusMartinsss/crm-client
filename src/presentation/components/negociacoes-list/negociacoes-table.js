@@ -99,8 +99,8 @@ export default function NegociacoesTable() {
     return (
         <React.Fragment>
             <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650, borderRadius: 5, border: 2, borderColor: '#A4D3EE' }} >
-                    <TableHead sx={{ backgroundColor: '#B0E2FF', }}>
+                <Table  >
+                    <TableHead>
                         <TableRow >
                             {colums.map((item) => (
                                 <TableCell
