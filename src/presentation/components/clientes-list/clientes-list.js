@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton } from '@mui/material'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Paper } from '@mui/material'
 import { remoteListClientesUseCase, remotefetchClienteUseCase } from '../../../domain/useCases/remote-clientes-useCase'
 import { useCliente } from '../../../domain/context/cliente-context';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -47,8 +47,8 @@ export const ClientesList = () => {
     const handleModal = () => setOpen((state) => !state)
     return (
         <React.Fragment>
-            <TableContainer>
-                <Table sx={{ minWidth: 650, borderRadius: 5, border: 2, borderColor: '#A4D3EE' }} >
+            <TableContainer component={Paper}>
+                <Table >
                     <TableHead>
                         <TableRow>
                             {colums.map((item, idx) => (

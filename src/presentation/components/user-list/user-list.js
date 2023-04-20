@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Table, TableContainer, TableHead, TableRow, TableCell, TableBody, IconButton } from '@mui/material'
+import { Table, TableContainer, TableHead, TableRow, TableCell, TableBody, IconButton, Paper } from '@mui/material'
 import { remoteFetchUsers, remoteFetchUser } from '../../../domain/useCases/remote-user-useCase'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { UserModal } from '../user-form/user-modal';
@@ -39,8 +39,8 @@ export const UserList = () => {
     const handleModal = () => setOpen((state) => !state)
     return (
         <React.Fragment>
-            <TableContainer>
-                <Table sx={{ minWidth: 650, borderRadius: 5, border: 2, borderColor: '#A4D3EE' }}>
+            <TableContainer component={Paper}>
+                <Table >
                     <TableHead>
                         <TableRow>
                             {colums.map((item, idx) => (
