@@ -11,7 +11,9 @@ export const GroupsView = () => {
     return (
         <Layout>
             <Box display='flex' justifyContent='space-between' flexDirection='column' gap={1}>
-                <Button onClick={handleModal} variant='contained'>Novo Grupo</Button>
+                <Box display='flex' flexDirection='row' >
+                    <Button onClick={handleModal} variant='contained' color='primary'>Novo Grupo</Button>
+                </Box>
                 <GroupsList />
                 <GroupModal open={open} handleModal={handleModal} />
             </Box>

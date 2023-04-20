@@ -7,7 +7,7 @@ import CalendarViewWeekOutlinedIcon from '@mui/icons-material/CalendarViewWeekOu
 import { NegociacaoModal } from '../../components/negociacao-form/negociacao-modal';
 import Layout from '../../components/layout/layout';
 export const HomeView = () => {
-    const [listType, setListType] = useState('list')
+    const [listType, setListType] = useState('kanban')
     const [open, setOpen] = useState(false)
 
     const handleModal = () => setOpen((state) => !state)
@@ -19,15 +19,15 @@ export const HomeView = () => {
                     flexDirection='row'
                     gap={1}
                 >
-                    <ButtonGroup size='small' variant="outlined" aria-label="outlined primary button group">
-                        <Button onClick={() => setListType('list')}>
+                    <ButtonGroup size='small' variant="outlined" aria-label="outlined primary button group" >
+                        <Button color='primary' onClick={() => setListType('list')}>
                             <DensitySmallIcon />
                         </Button>
-                        <Button onClick={() => setListType('kanban')}>
-                            <CalendarViewWeekOutlinedIcon />
+                        <Button color='primary' onClick={() => setListType('kanban')}>
+                            <CalendarViewWeekOutlinedIcon  />
                         </Button>
                     </ButtonGroup>
-                    <Button onClick={handleModal} size='small' variant='contained' color='success'>+ Negocio</Button>
+                    <Button onClick={handleModal} size='small' variant='contained' color='primary'>+ Negocio</Button>
                 </Box>
                 {listType === 'list' ? (<NegociacoesTable />) : (<NegociacoesKankanList />)}
                 <NegociacaoModal open={open} handleModal={handleModal} />

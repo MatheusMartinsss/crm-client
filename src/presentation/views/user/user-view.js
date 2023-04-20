@@ -11,7 +11,9 @@ export const UserView = () => {
     return (
         <Layout>
             <Box display='flex' justifyContent='space-between' flexDirection='column' gap={1}>
-                <Button onClick={handleModal} variant='contained'>+ Usuario</Button>
+                <Box display='flex' flexDirection='row'>
+                    <Button onClick={handleModal} variant='contained'>+ Usuario</Button>
+                </Box>
                 <UserList />
                 <UserModal handleModal={handleModal} open={open} />
             </Box>
