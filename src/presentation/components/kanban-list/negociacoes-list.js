@@ -3,7 +3,7 @@ import { Box} from '@mui/material';
 import Negociacao from './negociacao';
 import { Droppable } from "react-beautiful-dnd";
 const getListStyle = isDraggingOver => ({
-    background: isDraggingOver ? "lightblue" : "#F5F5F5",
+    background: isDraggingOver && "lightblue" ,
     padding: 5,
     width: 400,
 });

@@ -7,7 +7,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
     padding: 10,
     margin: `0 0 8px 0`,
     // change background colour if dragging
-    background: isDragging ? "lightgreen" : "#FFFFFF",
+    background: isDragging && "lightgreen",
     borderRadius: 8,
     // styles we need to apply on draggables
     ...draggableStyle
@@ -21,7 +21,7 @@ const Negociacao = ({ negociacao, index, handleEditNegociacao }) => {
                     display='flex'
                     flexDirection='column'
                     component={Paper}
-                    elevation={1}
+                    elevation={2}
                     onClick={() => handleEditNegociacao(id)}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
