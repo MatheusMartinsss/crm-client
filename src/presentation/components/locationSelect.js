@@ -1,4 +1,4 @@
-import { Autocomplete, TextField, Grid } from "@mui/material"
+import { Autocomplete, TextField, Grid, FormControl, FormLabel } from "@mui/material"
 import Api from "../../helpers/api"
 import { useEffect, useState } from "react"
 
@@ -32,7 +32,7 @@ const LocationSelect = ({ handleLocation, initialValue }) => {
     }, [location])
     return (
         <Grid container spacing={2}>
-            <Grid item xs={12} >
+            <Grid item xs={12} md={6} >
                 <Autocomplete
                     options={estados}
                     value={location.estado || null}
@@ -42,23 +42,26 @@ const LocationSelect = ({ handleLocation, initialValue }) => {
                         setLocation((state) => ({ ...state, estado: newValue, cidade: '' }))
                     }}
                     renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            onClick={fetchStates}
-                            label="Estados"
-                            autoComplete='new-password'
-                            InputProps={{
-                                ...params.InputProps,
-                            }}
-                        />
+                        <FormControl fullWidth>
+                            <FormLabel>Estados</FormLabel>
+                            <TextField
+                                {...params}
+                                onClick={fetchStates}
+                                size="small"
+                                autoComplete='new-password'
+                                InputProps={{
+                                    ...params.InputProps,
+                                }}
+                            />
+                        </FormControl>
                     )}
                 >
                 </Autocomplete>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} md={6}>
                 <Autocomplete
                     options={cidades}
-                    disabled={!location.estado}
+                    disabled={!cidades.length}
                     value={location.cidade}
                     getOptionLabel={(option) => option.nome || option}
                     isOptionEqualToValue={(option, value) => option.nome === value}
@@ -66,15 +69,18 @@ const LocationSelect = ({ handleLocation, initialValue }) => {
                         setLocation((state) => ({ ...state, cidade: newValue.nome }))
                     }}
                     renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            onClick={fetchCitys}
-                            label="Cidades"
-                            autoComplete='new-password'
-                            InputProps={{
-                                ...params.InputProps,
-                            }}
-                        />
+                        <FormControl fullWidth>
+                            <FormLabel>Cidades</FormLabel>
+                            <TextField
+                                {...params}
+                                onClick={fetchCitys}
+                                size="small"
+                                autoComplete='new-password'
+                                InputProps={{
+                                    ...params.InputProps,
+                                }}
+                            />
+                        </FormControl>
                     )}
                 >
                 </Autocomplete>
