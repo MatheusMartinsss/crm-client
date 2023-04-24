@@ -12,7 +12,7 @@ export const menuItens = [
         path: '/clientes',
         icon: <GroupsIcon />
     }, {
-        label: 'Grupos',
+        label: 'Etapas',
         path: '/grupos',
         icon: <GridViewIcon />
     }, {
