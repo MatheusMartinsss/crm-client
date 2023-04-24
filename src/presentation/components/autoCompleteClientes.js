@@ -5,43 +5,32 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { remoteListClientesUseCase } from '../../domain/useCases/remote-clientes-useCase';
 
 export default function AutoCompleteClientes({ handleCliente, error, helperText, initialValue }) {
-    const [open, setOpen] = React.useState(false);
     const [options, setOptions] = React.useState([]);
-    const loading = open && options.length === 0;
+    const [loading, setLoading] = React.useState(false)
 
-    React.useEffect(() => {
-        if (!options.length) {
-            const fetchClientes = async () => {
-                await remoteListClientesUseCase()
-                    .then((response) => {
-                        setOptions(response)
-                    })
-            }
-            fetchClientes()
-        }
-        // eslint-disable-next-line
-    }, [open])
+
+    const fetchData = async () => {
+        if (options.length) return
+        setLoading(true)
+        await remoteListClientesUseCase().then((response) => {
+            setOptions(response)
+        }).finally(() => setLoading(false))
+    }
 
     return (
         <Autocomplete
-            open={open}
-            onOpen={() => {
-                setOpen(true);
-            }}
-            onClose={() => {
-                setOpen(false);
-            }}
+
             fullWidth
             defaultValue={initialValue || null}
             isOptionEqualToValue={(option, value) => option.name === value.name}
             getOptionLabel={(option) => option.name}
             options={options}
-            loading={loading}
             onChange={(value, newValue) => {
                 handleCliente(newValue.id)
             }}
             renderInput={(params) => (
                 <TextField
+                    onClick={fetchData}
                     error={error}
                     helperText={helperText}
                     {...params}
@@ -50,7 +39,7 @@ export default function AutoCompleteClientes({ handleCliente, error, helperText,
                         ...params.InputProps,
                         endAdornment: (
                             <React.Fragment>
-                                {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                                {loading && <CircularProgress color="inherit" size={20} />}
                                 {params.InputProps.endAdornment}
                             </React.Fragment>
                         ),
