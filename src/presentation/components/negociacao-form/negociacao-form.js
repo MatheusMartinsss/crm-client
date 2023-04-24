@@ -4,7 +4,7 @@ import * as yup from "yup";
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup';
 import { remoteAddNegociacaoUseCase, remoteUpdateNegociacaoUseCase } from '../../../domain/useCases/remote-negociacoes-useCase';
-import AutoCompleteTagsAdd from '../autoCompleteTagsAdd';
+import AutoCompleteTagsAdd from '../SelectTag';
 import AutoCompleteGroups from '../autoCompleteGroups';
 import AutoCompleteClientes from '../autoCompleteClientes';
 import { useNegociacao } from '../../../domain/context/useNegociacao';
@@ -17,26 +17,27 @@ const schema = yup.object({
     group_id: yup.mixed().required('Selecione um grupo'),
     value: yup.mixed(),
     closeExpect: yup.date(),
-    tags: yup.array()
+    Tag: yup.object()
 })
 
 export const NegociacaoForm = ({ data, handleModal }) => {
     const initialData = {
-        id: data?.id || null, 
+        id: data?.id || null,
         name: data?.name,
         description: data?.description,
         value: data?.value,
         closeExpect: formatENG(data?.closeExpect),
-        tags: data?.Tags.map((item) => item.id),
+        Tag: data?.Tag,
         cliente_id: data?.Cliente?.id,
         group_id: data?.Group?.id
     }
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
         defaultValues: initialData || null
     })
     const { addNegociacao, updateNegociacao } = useNegociacao()
     let editMode = !!data
+    let Tag = watch('Tag')
     const handleForm = async (formData) => {
         const body = {
             id: formData?.id,
@@ -44,7 +45,7 @@ export const NegociacaoForm = ({ data, handleModal }) => {
             description: formData?.description,
             value: formData?.value,
             closeExpect: formData?.closeExpect,
-            tags: formData?.tags,
+            Tag: formData?.Tag,
             cliente_id: formData?.cliente_id,
             group_id: formData?.group_id
         }
@@ -71,7 +72,7 @@ export const NegociacaoForm = ({ data, handleModal }) => {
         }
         return editedFields
     }
-    const handleTags = (tags) => setValue('tags', tags.map((item) => item.id))
+    const handleTags = (tag) => setValue('Tag', tag)
 
     const handleGroup = (groupId) => setValue('group_id', groupId)
 
@@ -79,7 +80,7 @@ export const NegociacaoForm = ({ data, handleModal }) => {
 
     return (
         <Grid container spacing={2} component='form' onSubmit={handleSubmit(handleForm)} >
-            <Grid item xs={12}>
+            <Grid item xs={12} md={6}>
                 <AutoCompleteGroups
                     handleGroup={handleGroup}
                     error={!!errors.group_id}
@@ -87,7 +88,7 @@ export const NegociacaoForm = ({ data, handleModal }) => {
                     helperText={errors?.group_id?.message}
                 />
             </Grid>
-            <Grid item xs={12} >
+            <Grid item xs={12} md={6}>
                 <TextField
                     {...register('name')}
                     fullWidth
@@ -115,7 +116,7 @@ export const NegociacaoForm = ({ data, handleModal }) => {
                     initialValue={data?.Cliente}
                 />
             </Grid>
-            <Grid item xs={12} >
+            <Grid item xs={12} md={6} >
                 <TextField
                     {...register('value')}
                     fullWidth
@@ -124,7 +125,7 @@ export const NegociacaoForm = ({ data, handleModal }) => {
                     helperText={errors?.value?.message}
                 ></TextField>
             </Grid>
-            <Grid item xs={12} >
+            <Grid item xs={12} md={6} >
                 <TextField
                     {...register('closeExpect')}
                     type='date'
@@ -136,15 +137,15 @@ export const NegociacaoForm = ({ data, handleModal }) => {
             </Grid>
             <Grid item xs={12}>
                 <AutoCompleteTagsAdd
-                    handleTag={handleTags}
-                    initialValue={data?.Tags}
+                    handleChange={handleTags}
+                    initialValue={Tag}
                 />
             </Grid>
             <Grid item xs={6}>
-                <Button fullWidth variant='contained' color='error'>Cancelar</Button>
+                <Button fullWidth variant='contained' color='secondary'>Cancelar</Button>
             </Grid>
             <Grid item xs={6}>
-                <Button type='submit' fullWidth variant='contained' color='success'>Salvar</Button>
+                <Button type='submit' fullWidth variant='contained' color='primary'>Salvar</Button>
             </Grid>
         </Grid>
     )
