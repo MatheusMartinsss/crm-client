@@ -8,7 +8,7 @@ const getListStyle = isDraggingOver => ({
     width: 400,
 });
 
-const NegociacoesList = ({ negociacoes, group, index, groupId, handleEditNegociacao }) => {
+const NegociacoesList = ({ negociacoes, group, index, groupId, onSelect }) => {
     return (
         <Droppable droppableId={groupId.toString()} key={index}>
             {(provided, snapshot) => (
@@ -24,7 +24,7 @@ const NegociacoesList = ({ negociacoes, group, index, groupId, handleEditNegocia
                         <Negociacao
                             key={idx}
                             index={idx}
-                            handleEditNegociacao = {handleEditNegociacao}
+                            onSelect = {onSelect}
                             negociacao={negociacao}
                         />
                     ))}

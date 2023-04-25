@@ -3,7 +3,7 @@ import { Dialog, DialogContent } from '@mui/material'
 import { NegociacaoForm } from './negociacao-form'
 
 
-export const NegociacaoModal = ({ data, open, handleModal }) => {
+export const NegociacaoModal = ({ data, open, handleModal, onUpdate, onCreate }) => {
 
     return (
         <React.Fragment>
@@ -12,7 +12,7 @@ export const NegociacaoModal = ({ data, open, handleModal }) => {
                 onClose={handleModal}
             >
                 <DialogContent>
-                    <NegociacaoForm data={data} handleModal={handleModal} />
+                    <NegociacaoForm data={data} handleModal={handleModal} onUpdate={onUpdate} onCreate={onCreate} />
                 </DialogContent>
             </Dialog>
         </React.Fragment>

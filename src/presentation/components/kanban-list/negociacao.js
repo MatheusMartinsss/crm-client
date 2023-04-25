@@ -12,8 +12,8 @@ const getItemStyle = (isDragging, draggableStyle) => ({
     // styles we need to apply on draggables
     ...draggableStyle
 });
-const Negociacao = ({ negociacao, index, handleEditNegociacao }) => {
-    const { name, Cliente, value, id } = negociacao
+const Negociacao = ({ negociacao, index, onSelect}) => {
+    const { name, Cliente, value, id, Tag } = negociacao
     return (
         <Draggable key={id} draggableId={id.toString()} index={index}  >
             {(provided, snapshot) => (
@@ -22,7 +22,8 @@ const Negociacao = ({ negociacao, index, handleEditNegociacao }) => {
                     flexDirection='column'
                     component={Paper}
                     elevation={2}
-                    onClick={() => handleEditNegociacao(id)}
+                    gap={2}
+                    onClick={() => onSelect(id)}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
@@ -39,6 +40,7 @@ const Negociacao = ({ negociacao, index, handleEditNegociacao }) => {
                         </Stack>
                         <Typography variant='subtitle2'>R${value}</Typography>
                     </Stack>
+                    <Box height={5} borderRadius={16} display='flex' bgcolor={Tag?.color} />
                 </Box>
             )}
         </Draggable>

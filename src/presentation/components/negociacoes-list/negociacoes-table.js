@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react"
-import { remoteGetNegociacoesUseCase, remoteFetchNegociacaoUseCase } from '../../../domain/useCases/remote-negociacoes-useCase'
-import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Chip, TableContainer, IconButton, Fab, TableSortLabel } from '@mui/material'
-import { useNegociacao } from "../../../domain/context/useNegociacao"
+import React, { useState } from "react"
+import { remoteFetchNegociacaoUseCase } from '../../../domain/useCases/remote-negociacoes-useCase'
+import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Chip, TableContainer, IconButton, TableSortLabel } from '@mui/material'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { NegociacaoModal } from '../../components/negociacao-form/negociacao-modal'
 
@@ -36,20 +35,18 @@ const colums = [
         label: 'Fechamento Esperado'
     }, {
         id: 'tags',
-        label: 'Tags'
+        label: 'Status'
     }, {
         id: 'options',
         label: 'Opções'
     }
 ]
 
-export default function NegociacoesTable() {
-    const { getNegociacoes, setNegociacoes } = useNegociacao()
-    const [open, setOpen] = useState(false)
+export default function NegociacoesTable({ data, onSelect }) {
     const [orderBy, setOrderBy] = useState('groupName')
     const [order, setOrder] = useState('asc')
-    const [negociacao, setNegociacao] = useState(null)
-    const negociacoes = getNegociacoes().map((item) => createData(
+
+    const negociacoes = data.map((item) => createData(
         item.id,
         item.Group.name,
         item.name,
@@ -57,25 +54,8 @@ export default function NegociacoesTable() {
         item.Cliente.name,
         item.Cliente.lastname,
         item.closeExpect,
-        item.Tags
+        item.Tag
     ))
-    useEffect(() => {
-        const fetchNegociacoes = async () => {
-            const response = await remoteGetNegociacoesUseCase()
-            setNegociacoes(response)
-        }
-        fetchNegociacoes()
-        // eslint-disable-next-line 
-    }, [])
-
-    const fetchNegociacao = async (id) => {
-        const response = await remoteFetchNegociacaoUseCase(id)
-        setNegociacao(response)
-        handleModal()
-    }
-
-    const handleModal = () => setOpen((state) => !state)
-
     const handleSortChange = (column) => {
         const sortOrder = column === orderBy && order === 'asc' ? 'desc' : 'asc';
         setOrder(sortOrder)
@@ -123,24 +103,18 @@ export default function NegociacoesTable() {
                                 <TableCell align="left">{row?.vendedorName}</TableCell>
                                 <TableCell align="left">{row?.clienteName} {row?.clienteLastname}</TableCell>
                                 <TableCell align="left">{row.closeExpect || 'vazio'}</TableCell>
-                                {!row?.tags?.length ? (
-                                    <TableCell align='left'>Vazio</TableCell>
-                                ) : (
-                                    <TableCell align='left' >
-                                        {row?.tags?.map((item) => (
-                                            <Chip
-                                                key={item.id}
-                                                size='small'
-                                                color='primary'
-                                                variant='string'
-                                                sx={{ backgroundColor: item.color, border: '1px' }}
-                                                label={item.name}>
-                                            </Chip>
-                                        ))}
-                                    </TableCell>
-                                )}
+                                <TableCell align='left' >
+                                    <Chip
+                                        key={row?.tags?.id}
+                                        size='small'
+                                        
+                                        variant='string'
+                                        sx={{ backgroundColor: row?.tags?.color, border: '1px' }}
+                                        label={row?.tags?.name}>
+                                    </Chip>
+                                </TableCell>
                                 <TableCell align="left">
-                                    <IconButton onClick={() => fetchNegociacao(row.id)}>
+                                    <IconButton onClick={() => onSelect(row.id)}>
                                         <VisibilityIcon />
                                     </IconButton>
                                 </TableCell>
@@ -149,10 +123,6 @@ export default function NegociacoesTable() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <NegociacaoModal data={negociacao} handleModal={handleModal} open={open} />
-            <Fab onClick={handleModal} variant="extended" size="small" sx={{ width: 300 }} color="primary" aria-label="add">
-                Nova negociação
-            </Fab>
         </React.Fragment>
     );
 }
