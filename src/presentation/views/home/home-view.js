@@ -1,5 +1,5 @@
 import { Box, ButtonGroup, Button } from '@mui/material'
-import React, { useState } from 'react'
+import React, {  useState } from 'react'
 import NegociacoesTable from '../../components/negociacoes-list/negociacoes-table'
 import NegociacoesKankanList from '../../components/kanban-list/negociacoes-kanban'
 import DensitySmallIcon from '@mui/icons-material/DensitySmall';
@@ -12,7 +12,7 @@ export const HomeView = () => {
     const [open, setOpen] = useState(false)
     const [negociacaoSelected, setSelected] = useState(null)
 
-    const { data, isLoading, getNegociacoes, updateNegociacaoGroup, getNegociacaoById } = useNegociacao()
+    const { data, isLoading, getNegociacoes, updateNegociacaoGroup, getNegociacaoById, updateNegociacao, addNegociacao } = useNegociacao()
 
     const onSelect = (id) => {
         let negociacao = getNegociacaoById(id)
@@ -20,7 +20,12 @@ export const HomeView = () => {
         handleModal()
     }
 
-    const handleModal = () => setOpen((state) => !state)
+    const handleModal = () => setOpen(true)
+
+    const onClose = () => {
+        setOpen(false)
+        setSelected(null)
+    }
 
     return (
         <Layout>
@@ -49,10 +54,17 @@ export const HomeView = () => {
                         <NegociacoesKankanList
                             data={data}
                             handleUpdate={updateNegociacaoGroup}
-                            onSelect = {onSelect}
+                            onSelect={onSelect}
                         />
                     )}
-                <NegociacaoModal open={open} handleModal={handleModal} data={negociacaoSelected} />
+                <NegociacaoModal
+                    open={open}
+                    handleModal={handleModal}
+                    data={negociacaoSelected}
+                    onUpdate={updateNegociacao}
+                    onCreate={addNegociacao}
+                    onClose={onClose}
+                />
             </Box>
         </Layout>
     )

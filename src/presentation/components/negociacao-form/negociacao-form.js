@@ -53,13 +53,13 @@ export const NegociacaoForm = ({ data, handleModal, onCreate, onUpdate }) => {
             const newValue = getOnlyEditedFields(initialData, formData)
             await remoteUpdateNegociacaoUseCase(body.id, newValue).then((response) => {
                 updateNegociacao(response.id, response)
-                onUpdate(response)
+                onUpdate(response.group_id, response.id, response)
                 handleModal()
             })
         } else {
             await remoteAddNegociacaoUseCase(body).then((response) => {
                 addNegociacao(response)
-                onCreate(response)
+                onCreate(response.group_id, response)
                 handleModal()
             })
         }

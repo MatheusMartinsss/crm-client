@@ -1,8 +1,7 @@
 import React, { useState } from "react"
-import { remoteFetchNegociacaoUseCase } from '../../../domain/useCases/remote-negociacoes-useCase'
 import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Chip, TableContainer, IconButton, TableSortLabel } from '@mui/material'
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { NegociacaoModal } from '../../components/negociacao-form/negociacao-modal'
+
 
 const createData = (id, groupName, title, vendedorName, clienteName, clienteLastName, closeExpect, tags) => {
     return {
@@ -107,7 +106,7 @@ export default function NegociacoesTable({ data, onSelect }) {
                                     <Chip
                                         key={row?.tags?.id}
                                         size='small'
-                                        
+
                                         variant='string'
                                         sx={{ backgroundColor: row?.tags?.color, border: '1px' }}
                                         label={row?.tags?.name}>

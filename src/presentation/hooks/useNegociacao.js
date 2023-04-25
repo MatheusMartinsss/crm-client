@@ -57,6 +57,31 @@ export const useNegociacao = () => {
         }
 
     }
+    const updateNegociacao = (groupId, id, body) => {
+        const newValue = data.map((group) => {
+            if (group.id === groupId) {
+                const newNegociacoes = group.Negociacoes.map((negociacao) => {
+                    if (negociacao.id === id) return {
+                        ...body
+                    }
+                    return negociacao
+                })
+                return { ...group, Negociacoes: newNegociacoes }
+            }
+            return group
+        })
+        setData(newValue)
+    }
+    const addNegociacao = (groupId, body) => {
+        const newValue = data.map((group) => {
+            if (group.id === groupId) {
+                const newNegociacoes = [...group.Negociacoes, { ...body }]
+                return { ...group, Negociacoes: newNegociacoes }
+            }
+            return group
+        })
+        setData(newValue)
+    }
     const getNegociacaoById = (id) => {
         const negociacao = getNegociacoes().find((item) => item.id === id)
         return negociacao
@@ -81,6 +106,8 @@ export const useNegociacao = () => {
         updateNegociacaoGroup,
         getNegociacoes,
         getNegociacaoById,
+        updateNegociacao,
+        addNegociacao,
         isLoading
     }
 }

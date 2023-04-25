@@ -3,16 +3,16 @@ import { Dialog, DialogContent } from '@mui/material'
 import { NegociacaoForm } from './negociacao-form'
 
 
-export const NegociacaoModal = ({ data, open, handleModal, onUpdate, onCreate }) => {
+export const NegociacaoModal = ({ data, open, handleModal, onUpdate, onCreate, onClose }) => {
 
     return (
         <React.Fragment>
             <Dialog
                 open={open}
-                onClose={handleModal}
+                onClose={onClose}
             >
                 <DialogContent>
-                    <NegociacaoForm data={data} handleModal={handleModal} onUpdate={onUpdate} onCreate={onCreate} />
+                    <NegociacaoForm data={data} handleModal={onClose} onUpdate={onUpdate} onCreate={onCreate} />
                 </DialogContent>
             </Dialog>
         </React.Fragment>
