@@ -1,51 +1,57 @@
 import * as React from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import CircularProgress from '@mui/material/CircularProgress';
-import { remoteListClientesUseCase } from '../../domain/useCases/remote-clientes-useCase';
-
+import { Button, Paper, Box, CircularProgress, Autocomplete, TextField } from '@mui/material';
+import { ClienteModal } from './cliente-form/cliente-modal';
+import { useCliente } from '../hooks/useCliente';
 export default function AutoCompleteClientes({ handleCliente, error, helperText, initialValue }) {
-    const [options, setOptions] = React.useState([]);
-    const [loading, setLoading] = React.useState(false)
+    const { data, isLoading, fetchData, addCliente } = useCliente()
+    const [open, setOpen] = React.useState(false)
 
+    const handleModal = () => setOpen((state) => !state)
 
-    const fetchData = async () => {
-        if (options.length) return
-        setLoading(true)
-        await remoteListClientesUseCase().then((response) => {
-            setOptions(response)
-        }).finally(() => setLoading(false))
+    const Menu = ({ children, other }) => (
+        <Box component={Paper} padding={1} {...other}>
+            <Button onMouseDown={handleModal} fullWidth color='primary' variant='contained'>+ Novo cliente</Button>
+            {children}
+        </Box>
+    )
+    const onCreate = (response) => {
+        addCliente(response)
+        handleCliente(response)
     }
-
     return (
-        <Autocomplete
-
-            fullWidth
-            defaultValue={initialValue || null}
-            isOptionEqualToValue={(option, value) => option.name === value.name}
-            getOptionLabel={(option) => option.name}
-            options={options}
-            onChange={(value, newValue) => {
-                handleCliente(newValue.id)
-            }}
-            renderInput={(params) => (
-                <TextField
-                    onClick={fetchData}
-                    error={error}
-                    helperText={helperText}
-                    {...params}
-                    label="Clientes"
-                    InputProps={{
-                        ...params.InputProps,
-                        endAdornment: (
-                            <React.Fragment>
-                                {loading && <CircularProgress color="inherit" size={20} />}
-                                {params.InputProps.endAdornment}
-                            </React.Fragment>
-                        ),
-                    }}
-                />
-            )}
-        />
+        <>
+            <Autocomplete
+                fullWidth
+                value={initialValue || null}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                getOptionLabel={(option) => option.name + " " + option.lastname}
+                options={data}
+                onChange={(value, newValue) => handleCliente(newValue)}
+                PaperComponent={Menu}
+                renderOption={(props, option) => (
+                    <li {...props} key={option.id}>
+                        {option.name} {option.lastname}
+                    </li>
+                )}
+                renderInput={(params) => (
+                    <TextField
+                        onClick={fetchData}
+                        error={error}
+                        helperText={helperText}
+                        {...params}
+                        InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                                <React.Fragment>
+                                    {isLoading && <CircularProgress color="inherit" size={20} />}
+                                    {params.InputProps.endAdornment}
+                                </React.Fragment>
+                            ),
+                        }}
+                    />
+                )}
+            />
+            <ClienteModal open={open} handleModal={handleModal} onCreate={onCreate} />
+        </>
     );
 }

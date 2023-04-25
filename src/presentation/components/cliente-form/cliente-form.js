@@ -13,7 +13,7 @@ const schema = yup.object({
     name: yup.string().required('Nome Obrigatorio!.'),
     lastname: yup.string().required('Nome Obrigatorio!.'),
     email: yup.string().email('Email invalido!').required(),
-    phonenumber: yup.string(),
+    phonenumber: yup.string().required('Campo obrigatorio.'),
     pessoa_tipo: yup.string(),
     location: yup.object().shape({
         estado: yup.string(),
@@ -23,14 +23,14 @@ const schema = yup.object({
     cpf: yup.string().required(),
 })
 
-export const ClienteForm = ({ handleModal, data }) => {
+export const ClienteForm = ({ handleModal, data, onCreate }) => {
     const { register, handleSubmit, setValue, getValues, control, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
         defaultValues: data
     })
     let editMode = !!data
     let location = getValues('location')
-    const { addCliente, updateCliente } = useCliente()
+    const {  updateCliente } = useCliente()
     const handleForm = async (form) => {
         if (editMode) {
             const newValue = getOnlyEditedFields(data, form)
@@ -38,7 +38,7 @@ export const ClienteForm = ({ handleModal, data }) => {
             updateCliente(form.id, response)
         } else {
             const response = await remoteAddClienteUseCase(form)
-            addCliente(response)
+            onCreate(response)
         }
         handleModal()
     }

@@ -13,7 +13,7 @@ const schema = yup.object({
     id: yup.mixed(),
     name: yup.string().required('Titulo obrigatório'),
     description: yup.string(),
-    cliente_id: yup.mixed(),
+    Cliente: yup.object(),
     group_id: yup.mixed().required('Selecione um grupo'),
     value: yup.mixed(),
     closeExpect: yup.date(),
@@ -28,7 +28,7 @@ export const NegociacaoForm = ({ data, handleModal, onCreate, onUpdate }) => {
         value: data?.value,
         closeExpect: formatENG(data?.closeExpect),
         Tag: data?.Tag,
-        cliente_id: data?.Cliente?.id,
+        Cliente: data?.Cliente,
         group_id: data?.Group?.id
     }
     const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({
@@ -38,6 +38,8 @@ export const NegociacaoForm = ({ data, handleModal, onCreate, onUpdate }) => {
     const { addNegociacao, updateNegociacao } = useNegociacao()
     let editMode = !!data
     let Tag = watch('Tag')
+    let Cliente = watch('Cliente')
+
     const handleForm = async (formData) => {
         const body = {
             id: formData?.id,
@@ -46,7 +48,7 @@ export const NegociacaoForm = ({ data, handleModal, onCreate, onUpdate }) => {
             value: formData?.value,
             closeExpect: formData?.closeExpect,
             Tag: formData?.Tag,
-            cliente_id: formData?.cliente_id,
+            Cliente: formData?.Cliente,
             group_id: formData?.group_id
         }
         if (editMode) {
@@ -78,7 +80,7 @@ export const NegociacaoForm = ({ data, handleModal, onCreate, onUpdate }) => {
 
     const handleGroup = (groupId) => setValue('group_id', groupId)
 
-    const handleCliente = (clienteId) => setValue('cliente_id', clienteId)
+    const handleCliente = (cliente) => setValue('Cliente', cliente)
 
     return (
         <Grid container spacing={2} component='form' onSubmit={handleSubmit(handleForm)} >
@@ -115,7 +117,7 @@ export const NegociacaoForm = ({ data, handleModal, onCreate, onUpdate }) => {
                     handleCliente={handleCliente}
                     error={!!errors.cliente_id}
                     helperText={errors?.cliente_id?.message}
-                    initialValue={data?.Cliente}
+                    initialValue={Cliente}
                 />
             </Grid>
             <Grid item xs={12} md={6} >
