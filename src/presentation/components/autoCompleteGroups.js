@@ -33,6 +33,7 @@ export default function AutoCompleteGroups({ handleGroup, error, helperText, ini
             }}
             defaultValue={initialValue || null}
             fullWidth
+            size='small'
             isOptionEqualToValue={(option, value) => option.name === value.name}
             getOptionLabel={(option) => option.name}
             options={options}
@@ -44,8 +45,12 @@ export default function AutoCompleteGroups({ handleGroup, error, helperText, ini
                 <TextField
                     error={error}
                     helperText={helperText}
+                    size='small'
                     {...params}
-                    label="Grupo"
+                    sx={{
+                        border: 'none',
+                        backgroundColor: 'rgba(0, 0, 0, 0.1)'
+                    }}
                     InputProps={{
                         ...params.InputProps,
                         endAdornment: (
