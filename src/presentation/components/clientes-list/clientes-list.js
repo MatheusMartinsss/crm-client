@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Paper } from '@mui/material'
+import { Table, TableBody, TableCell, TableContainer, TableRow, IconButton, Paper } from '@mui/material'
 import { remoteListClientesUseCase, remotefetchClienteUseCase } from '../../../domain/useCases/remote-clientes-useCase'
 import { useCliente } from '../../../domain/context/cliente-context';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { ClienteModal } from '../cliente-form/cliente-modal';
+import { TableHeader, CTableCellHeader } from '../custom-styles/custom-styles';
 const colums = [
     {
         id: 'name',
@@ -47,18 +48,18 @@ export const ClientesList = () => {
     const handleModal = () => setOpen((state) => !state)
     return (
         <React.Fragment>
-            <TableContainer component={Paper}>
-                <Table >
-                    <TableHead>
+            <TableContainer component={Paper} sx={{ height: 650 }} >
+                <Table  >
+                    <TableHeader >
                         <TableRow>
                             {colums.map((item, idx) => (
-                                <TableCell key={idx}>{item.label}</TableCell>
+                                <CTableCellHeader key={idx}>{item.label}</CTableCellHeader>
                             ))}
                         </TableRow>
-                    </TableHead>
+                    </TableHeader>
                     <TableBody>
                         {data.map((item, idx) => (
-                            <TableRow key={idx}>
+                            <TableRow key={idx} >
                                 <TableCell>{item.name}</TableCell>
                                 <TableCell>{item.lastname}</TableCell>
                                 <TableCell>{item.email}</TableCell>

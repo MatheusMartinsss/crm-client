@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { GroupsList } from '../../components/groups-list/groups-list'
 import { GroupModal } from '../../components/group-form/group-modal'
 import Layout from '../../components/layout/layout'
+import { FilterBox } from '../../components/custom-styles/custom-styles'
 
 export const GroupsView = () => {
     const [open, setOpen] = useState(false)
@@ -11,9 +12,12 @@ export const GroupsView = () => {
     return (
         <Layout>
             <Box display='flex' justifyContent='space-between' flexDirection='column' gap={1}>
-                <Box display='flex' flexDirection='row' >
-                    <Button onClick={handleModal} variant='contained' color='primary'>Novo Grupo</Button>
-                </Box>
+                <FilterBox>
+                    <Box>
+                        <Button size='small' onClick={handleModal} variant='contained' color='primary'>nova Etapa</Button>
+                    </Box>
+                </FilterBox>
+
                 <GroupsList />
                 <GroupModal open={open} handleModal={handleModal} />
             </Box>

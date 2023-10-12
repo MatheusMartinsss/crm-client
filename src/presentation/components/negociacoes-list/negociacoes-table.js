@@ -1,6 +1,8 @@
 import React, { useState } from "react"
-import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Chip, TableContainer, IconButton, TableSortLabel } from '@mui/material'
+import { Table, TableBody, TableCell, TableRow, Paper, Chip, TableContainer, IconButton, TableSortLabel } from '@mui/material'
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { CTableCellHeader, TableHeader } from "../custom-styles/custom-styles";
+import { TableCellDate } from "../TableCellDate";
 
 
 const createData = (id, groupName, title, vendedorName, clienteName, clienteLastName, closeExpect, tags) => {
@@ -77,12 +79,12 @@ export default function NegociacoesTable({ data, onSelect }) {
     }
     return (
         <React.Fragment>
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} sx={{ height: 650 }}>
                 <Table  >
-                    <TableHead>
+                    <TableHeader>
                         <TableRow >
                             {colums.map((item) => (
-                                <TableCell
+                                <CTableCellHeader
                                     key={item.id}
                                     align="left"
                                     onClick={() => handleSortChange(item.id)}
@@ -90,10 +92,10 @@ export default function NegociacoesTable({ data, onSelect }) {
                                     <TableSortLabel active={orderBy === item.id}>
                                         {item.label}
                                     </TableSortLabel>
-                                </TableCell>
+                                </CTableCellHeader>
                             ))}
                         </TableRow>
-                    </TableHead>
+                    </TableHeader>
                     <TableBody>
                         {handleSorting(orderBy, order, negociacoes).map((row) => (
                             <TableRow key={row.id}>
@@ -101,7 +103,7 @@ export default function NegociacoesTable({ data, onSelect }) {
                                 <TableCell align="left">{row?.title}</TableCell>
                                 <TableCell align="left">{row?.vendedorName}</TableCell>
                                 <TableCell align="left">{row?.clienteName} {row?.clienteLastname}</TableCell>
-                                <TableCell align="left">{row.closeExpect || 'vazio'}</TableCell>
+                                <TableCellDate align='left' date={row.closeExpect} />
                                 <TableCell align='left' >
                                     <Chip
                                         key={row?.tags?.id}

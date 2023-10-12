@@ -1,34 +1,64 @@
 
-import React from 'react'
-import { Box, ListItemIcon, ListItem, ListItemButton, ListItemText, Paper, Typography, Divider } from "@mui/material";
+import React, { useState } from 'react'
+import { Box,  Paper, Typography, styled, Stack } from "@mui/material";
 import { menuItens } from './menuItens'
-import { useNavigate } from "react-router-dom";
+import { MenuItem } from './menuItem';
+
+const ExpandedSideBar = styled(Paper)(() => ({
+    width: '100px', // Ajuste a largura conforme necessário
+    backgroundColor: '#1C2536', // Cor de fundo agradável
+    transition: 'all 0.1s', // Transição suave de largura ao abrir/fechar
+    position: 'fixed',
+    zIndex: 2500,
+    height: '100%',
+    flexDirection: 'column',
+    display: 'flex',
+    alignItems: 'center',
+    ":hover": {
+        width: '200px',
+        cursor: 'pointer',
+    }
+}))
 
 
 export const Sidebar = () => {
-    const navigate = useNavigate()
+    const [open, setOpen] = useState(false)
+
+    const handleMouseEnter = () => {
+        setOpen(true);
+    };
+
+    const handleMouseLeave = () => {
+        setOpen(false);
+    };
     return (
-        <Box
-            sx={{ display: 'flex' }}
+        <ExpandedSideBar
+            open={open}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
         >
-            <Paper elevation={2} sx={{ maxWidth: 300, minHeight: '100vh', flexDirection: 'column' }}>
-                <Box sx={{ padding: 2, textAlign: 'center' }} display='flex' height='80px'>
-                    <Typography fontSize={20} fontWeight='medium'>CRM-Client</Typography>
-                </Box>
-          
-                {menuItens.map((item, idx) => (
-                    <ListItem key={idx} >
-                        <ListItemButton
-                            onClick={() => navigate(item.path)} >
-                            <ListItemIcon >
-                                {item.icon}
-                            </ListItemIcon>
-                            <ListItemText primary={item.label}
-                                primaryTypographyProps={{ fontSize: 14, fontWeight: 'medium' }}>{item.label}</ListItemText>
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </Paper>
-        </Box>
+            <Box sx={{ padding: 2, textAlign: 'center' }} display='flex' height='80px'>
+                <Typography fontSize={20} fontWeight='medium'>CRM</Typography>
+            </Box>
+            <Box>
+                {menuItens.map((item, idx) => {
+                    const isActive = item.path === window.location.pathname
+                    return (
+                        <Stack
+                            component='ul'
+                            spacing={0.5}
+                            sx={{
+                                listStyle: 'none',
+                                p: 0,
+                                m: 0,
+                            }}
+                        >
+                            <MenuItem Icon={item.icon} label={item.label} path={item.path} active={isActive} open={open} />
+                        </Stack>
+
+                    )
+                })}
+            </Box>
+        </ExpandedSideBar >
     )
 }

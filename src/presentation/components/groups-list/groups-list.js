@@ -1,9 +1,10 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Paper } from '@mui/material'
+import { Table, TableBody, TableCell, TableContainer, TableRow, IconButton, Paper } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { remoteListGroupsUseCase, remoteFetchGroupUseCase } from '../../../domain/useCases/remote-groups-useCase'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { GroupModal } from '../group-form/group-modal';
 import { useGroup } from '../../../domain/context/group-context';
+import { CTableCellHeader, TableHeader } from '../custom-styles/custom-styles';
 const colums = [
     {
         id: 'name',
@@ -38,15 +39,15 @@ export const GroupsList = () => {
     const handleModal = () => setOpen((state) => !state)
     return (
         <React.Fragment>
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} sx={{ height: 650 }}>
                 <Table >
-                    <TableHead>
+                    <TableHeader>
                         <TableRow>
                             {colums.map((item, idx) => (
-                                <TableCell key={idx}>{item.label}</TableCell>
+                                <CTableCellHeader key={idx}>{item.label}</CTableCellHeader>
                             ))}
                         </TableRow>
-                    </TableHead>
+                    </TableHeader>
                     <TableBody>
                         {data.map((item) => (
                             <TableRow key={item.id}>

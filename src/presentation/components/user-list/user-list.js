@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Table, TableContainer, TableHead, TableRow, TableCell, TableBody, IconButton, Paper } from '@mui/material'
+import { Table, TableContainer,  TableRow, TableCell, TableBody, IconButton, Paper } from '@mui/material'
 import { remoteFetchUsers, remoteFetchUser } from '../../../domain/useCases/remote-user-useCase'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { UserModal } from '../user-form/user-modal';
 import { useUsers } from '../../../domain/context/users-context';
+import { CTableCellHeader, TableHeader } from '../custom-styles/custom-styles';
 const colums = [
     {
         id: 'name',
@@ -39,15 +40,15 @@ export const UserList = () => {
     const handleModal = () => setOpen((state) => !state)
     return (
         <React.Fragment>
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} sx={{ height: 650 }} >
                 <Table >
-                    <TableHead>
+                    <TableHeader>
                         <TableRow>
                             {colums.map((item, idx) => (
-                                <TableCell key={idx}>{item.label}</TableCell>
+                                <CTableCellHeader key={idx}>{item.label}</CTableCellHeader>
                             ))}
                         </TableRow>
-                    </TableHead>
+                    </TableHeader>
                     <TableBody>
                         {data.map((item) => (
                             <TableRow>

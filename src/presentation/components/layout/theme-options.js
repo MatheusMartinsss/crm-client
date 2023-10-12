@@ -26,8 +26,8 @@ export const LightTheme = createTheme({
             main: '#9c27b0',
         },
         background: {
-            default: '#F7F6F6',
-            paper: '#fff',
+            default: '#f5f5f5',
+            paper: '#FFFFF',
         },
     },
 })
