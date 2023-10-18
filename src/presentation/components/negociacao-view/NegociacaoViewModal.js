@@ -1,10 +1,10 @@
-import { Dialog, Box, DialogContent, DialogTitle, Typography, styled, TextField, Grid, Paper, Avatar, Select, MenuItem } from "@mui/material"
+import { Dialog, Box, DialogContent, Typography, styled, TextField, Grid, Avatar } from "@mui/material"
 import { useState } from "react"
 import AutoCompleteGroups from "../autoCompleteGroups"
 import { PrioritySelect } from "../prioritySelect"
 import { DateInput } from "./components/dateInput"
+import 'quill/dist/quill.snow.css';
 const CTextField = styled(TextField)(({ theme }) => ({
-
     cursor: 'text',
     '& .MuiOutlinedInput-root': {
         '& fieldset': {
@@ -40,7 +40,8 @@ const DescriptionBox = styled(Box)(({ theme }) => ({
         backgroundColor: 'rgba(0, 0, 0, 0.1)',
         border: 'none'
     },
-    height: '200px',
+
+
 
 }))
 
@@ -82,15 +83,70 @@ CTextField.defaultProps = {
     }
 }
 
-
-
-export const NegociacaoViewModal = ({ open, handleModal, data }) => {
-    const textFieldStyles = {
-        backgroundColor: 'lightblue',
-        color: 'darkblue',
+const CustomInputDate = styled(DateInput)({
+    backgroundColor: '#f0f0f0',
+    width: 150,
+    borderRadius: 6,
+    "& fieldset": {
+        border: 'none',
+    },
+    '&:hover fieldset': {
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
         border: 'none'
-        // Adicione outros estilos conforme necessário
-    };
+    },
+})
+CustomInputDate.defaultProps = {
+    size: 'small',
+}
+
+const CustomGroupTextField = styled(TextField)({
+    backgroundColor: '#f0f0f0',
+    width: 150,
+    borderRadius: 6,
+    "& fieldset": {
+        border: 'none',
+    },
+    '&:hover fieldset': {
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+        border: 'none'
+    },
+})
+CustomGroupTextField.defaultProps = {
+    size: 'small'
+}
+
+const textFieldStyles = {
+    backgroundColor: 'lightblue',
+    color: 'darkblue',
+    border: 'none',
+    "& fieldset": {
+        border: 'none',
+    },
+};
+
+const CustomPrioritySelect = styled(PrioritySelect)({
+    width: 150,
+    border: 'none',
+    backgroundColor: '#f0f0f0',
+    "& fieldset": {
+        border: 'none',
+    },
+    '&:hover fieldset': {
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+        border: 'none'
+    },
+})
+
+CustomPrioritySelect.defaultProps = {
+    size: 'small'
+}
+
+
+export const NegociacaoViewModal = ({ open, handleModal, data, handleUpdate }) => {
+
+    const onUpdate = (key, data) => {
+        handleUpdate(key, data)
+    }
     return (
         <Dialog
             open={open}
@@ -98,21 +154,9 @@ export const NegociacaoViewModal = ({ open, handleModal, data }) => {
             fullWidth={true}
             maxWidth='lg'
         >
-            <DialogContent
-                sx={{
-                    width: '100%',
-                    height: 600,
-                    display: 'flex',
-                    flexDirection: 'row',
-                    padding: '40px 5px 20px 30px'
-                }}>
-                <Box
-                    sx={{
-                        width: '70%',
-                        padding: '5px 15px 10px 15px'
-                    }}
-                >
-                    <Grid container spacing={2}>
+            <DialogContent sx={{ display: 'flex', flexDirection: 'row', padding: '40px 5px 20px 30px' }}>
+                <Box sx={{ display: 'flex', width: '70%', padding: '5px 15px 10px 15px' }}>
+                    <Grid container spacing={2} >
                         <Grid item xs={12}>
                             <TitleBox>
                                 <Typography fontWeight='bolder' variant="h5">
@@ -120,11 +164,14 @@ export const NegociacaoViewModal = ({ open, handleModal, data }) => {
                                 </Typography>
                             </TitleBox>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} >
                             <CustomLabel fontWeight='bolder' variant="subtitle2">Descrição</CustomLabel>
-                            <DescriptionBox>
-                                {data?.description}
-                            </DescriptionBox>
+                            <DescriptionBox
+                                sx={{
+                                    padding: '0px !important',
+                                }}
+                                dangerouslySetInnerHTML={{ __html: data?.description }}
+                            />
                         </Grid>
                         <Grid item xs={12} >
                             <CustomLabel variant="subtitle1" fontWeight='bolder'>Comentarios</CustomLabel>
@@ -159,6 +206,15 @@ export const NegociacaoViewModal = ({ open, handleModal, data }) => {
                                 <AutoCompleteGroups
                                     textFieldStyle={textFieldStyles}
                                     initialValue={data?.Group}
+                                    name='Group'
+                                    onChange={(e) => onUpdate('Group', e.target)}
+                                    renderInput={(params) => (
+                                        <CustomGroupTextField
+                                            name="Group"
+                                            {...params}
+                                        >
+                                        </CustomGroupTextField>
+                                    )}
                                 >
                                 </AutoCompleteGroups>
                             </Box>
@@ -173,20 +229,32 @@ export const NegociacaoViewModal = ({ open, handleModal, data }) => {
                         <Grid item xs={12}>
                             <Box width={120}>
                                 <CustomLabel variant="subtitle2" >Prioridade</CustomLabel>
-                                <PrioritySelect priority={data?.prioridade} />
+                                <CustomPrioritySelect
+                                    name='prioridade'
+                                    value={data?.prioridade}
+                                    onChange={(e) => onUpdate(e.target.name, e.target.value)}
+                                />
                             </Box>
                         </Grid>
-                        <Grid item xs={12}>
-                            <CustomLabel variant="subtitle2" >Fechamento Esperado</CustomLabel>
-                            <DateInput date={data?.closeExpect} />
+                        <Grid item xs={12} display='flex' direction='column'>
+                            <CustomLabel variant="subtitle2" >Previsão</CustomLabel>
+                            <CustomInputDate
+                                name='closeExpect'
+                                value={data?.closeExpect}
+                                onChange={(e) => onUpdate(e.target.name, e.target.value)}
+                            />
                         </Grid>
-                        <Grid item xs={12}>
-                            <CustomLabel variant="subtitle2" >Aberta</CustomLabel>
-                            <DateInput date={data?.createdAt} />
+                        <Grid item xs={12} display='flex' direction='column'>
+                            <CustomLabel variant="subtitle2" >Abertura</CustomLabel>
+                            <CustomInputDate
+                                name='createdAt'
+                                value={data?.createdAt}
+                                onChange={(e) => onUpdate(e.target.name, e.target.value)}
+                            />
                         </Grid>
                     </Grid>
                 </Box>
             </DialogContent>
-        </Dialog>
+        </Dialog >
     )
 }

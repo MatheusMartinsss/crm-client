@@ -1,10 +1,9 @@
 import * as React from 'react';
-import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import CircularProgress from '@mui/material/CircularProgress';
 import { remoteListGroupsUseCase } from '../../domain/useCases/remote-groups-useCase';
 
-export default function AutoCompleteGroups({ handleGroup, error, helperText, initialValue }) {
+export default function AutoCompleteGroups({ handleGroup, error, helperText, initialValue, ...props }) {
+    const { onChange } = props
     const [open, setOpen] = React.useState(false);
     const [options, setOptions] = React.useState([]);
     const loading = open && options.length === 0;
@@ -24,6 +23,7 @@ export default function AutoCompleteGroups({ handleGroup, error, helperText, ini
 
     return (
         <Autocomplete
+            {...props}
             open={open}
             onOpen={() => {
                 setOpen(true);
@@ -32,36 +32,11 @@ export default function AutoCompleteGroups({ handleGroup, error, helperText, ini
                 setOpen(false);
             }}
             defaultValue={initialValue || null}
-            fullWidth
-            size='small'
             isOptionEqualToValue={(option, value) => option.name === value.name}
             getOptionLabel={(option) => option.name}
             options={options}
             loading={loading}
-            onChange={(value, newValue) => {
-                handleGroup(newValue.id)
-            }}
-            renderInput={(params) => (
-                <TextField
-                    error={error}
-                    helperText={helperText}
-                    size='small'
-                    {...params}
-                    sx={{
-                        border: 'none',
-                        backgroundColor: 'rgba(0, 0, 0, 0.1)'
-                    }}
-                    InputProps={{
-                        ...params.InputProps,
-                        endAdornment: (
-                            <React.Fragment>
-                                {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                                {params.InputProps.endAdornment}
-                            </React.Fragment>
-                        ),
-                    }}
-                />
-            )}
+            onChange={(e, value) => onChange(value)}
         />
     );
 }

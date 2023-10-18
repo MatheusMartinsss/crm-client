@@ -6,15 +6,14 @@ export const useNegociacao = () => {
     const [isLoading, setIsloading] = useState(true)
 
     useEffect(() => {
-        const fetchData = async () => {
-            await getNegociacoesByGroup()
-                .then((response) => setData(response))
-                .catch((error) => console.log(error))
-                .finally(() => setIsloading(false))
-        }
         fetchData()
     }, [])
-
+    const fetchData = async () => {
+        await getNegociacoesByGroup()
+            .then((response) => setData(response))
+            .catch((error) => console.log(error))
+            .finally(() => setIsloading(false))
+    }
     const updateNegociacaoGroup = (result) => {
         const {
             source,

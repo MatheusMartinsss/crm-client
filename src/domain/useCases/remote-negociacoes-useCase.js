@@ -13,7 +13,7 @@ export const remoteGetNegociacoesUseCase = async () => {
         }
     }
 }
-export const remoteAddNegociacaoUseCase = async (body) => {
+export const createNegociacao = async (body) => {
     try {
         const response = await Api.post('/negociacao', { ...body })
         return response.data

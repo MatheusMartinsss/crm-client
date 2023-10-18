@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { loadToken, setToken } from "../../presentation/hooks/acess-token";
 import { validateTokenUseCase } from "../../domain/useCases/remote-auth-useCase";
 import { logout } from "../../presentation/hooks/logout";
-import { MakeAuthView, MakeClienteView, MakeHomeView, MakeGroupView, MakeUserView } from './useCases/'
+import { MakeAuthView, MakeClienteView, MakeHomeView, MakeGroupView, MakeUserView, MakeNegociacaoView } from './useCases/'
 
 function App() {
   const { user, setUser } = useAuth()
@@ -33,6 +33,7 @@ function App() {
           <Route path='/clientes' element={<MakeClienteView />} />
           <Route path="/grupos" element={<MakeGroupView />} />
           <Route path="/users" element={<MakeUserView />} />
+          <Route path="/negociacao" element={<MakeNegociacaoView />} />
         </Route>
         <Route>
           <Route element={<RestrictedRoute user={user} />}>

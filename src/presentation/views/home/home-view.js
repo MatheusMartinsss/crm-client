@@ -33,54 +33,58 @@ export const HomeView = () => {
         setOpen(false)
         setSelected(null)
     }
-
+    const onUpdateSelected = (key, data) => {
+        console.log(data)
+        //updateNegociacao(negociacaoSelected.group_id, negociacaoSelected.id, )
+    }
     return (
-        <Layout>
-            <Box display='flex' justifyContent='space-between' flexDirection='column' gap={1}>
-                <FilterBox>
-                    <Box display='flex' alignItems='center' gap={2}>
-                        <Button onClick={handleModal} size='small' variant='contained' color='primary'>+ Negocio</Button>
-                        <ButtonGroup size='small' variant="outlined" aria-label="outlined primary button group" >
-                            <Button
-                                color='primary'
-                                onClick={() => setListType(Options.list)}
-                                sx={{
-                                    borderColor: listType === Options.list ? 'primary.main' : 'rgba(0, 0, 0, 0.23)',
-                                    backgroundColor: listType === Options.list ? 'transparent' : 'transparent',
-                                    color: listType === Options.list ? 'primary' : 'primary',
-                                    boxShadow: listType === Options.list ? '0 2px 4px rgba(0, 0, 0, 0.2)' : 'none'
-                                }}
-                            >
-                                <DensitySmallIcon />
-                            </Button>
-                            <Button
-                                color='primary'
-                                onClick={() => setListType(Options.kanban)}
-                                sx={{
-                                    borderColor: listType === Options.kanban ? 'primary.main' : 'rgba(0, 0, 0, 0.23)',
-                                    backgroundColor: listType === Options.kanban ? 'transparent' : 'transparent',
-                                    color: listType === Options.kanban ? 'primary' : 'primary',
-                                    boxShadow: listType === Options.kanban ? '0 2px 4px rgba(0, 0, 0, 0.2)' : 'none'
-                                }}
-                            >
-                                <CalendarViewWeekOutlinedIcon />
-                            </Button>
-                        </ButtonGroup>
-                    </Box>
-                </FilterBox>
-                {listType === 'list' ?
-                    (<NegociacoesTable
-                        data={getNegociacoes()}
-                        onSelect={onSelect}
-                    />
-                    ) : (
-                        <NegociacoesKankanList
-                            data={data}
-                            handleUpdate={updateNegociacaoGroup}
+        <React.Fragment>
+            <Layout>
+                <Box display='flex' justifyContent='space-between' flexDirection='column' gap={1}>
+                    <FilterBox>
+                        <Box display='flex' alignItems='center' gap={2}>
+                            <Button onClick={handleModal} size='small' variant='contained' color='primary'>+ Negocio</Button>
+                            <ButtonGroup size='small' variant="outlined" aria-label="outlined primary button group" >
+                                <Button
+                                    color='primary'
+                                    onClick={() => setListType(Options.list)}
+                                    sx={{
+                                        borderColor: listType === Options.list ? 'primary.main' : 'rgba(0, 0, 0, 0.23)',
+                                        backgroundColor: 'transparent',
+                                        color: 'primary',
+                                        boxShadow: listType === Options.list ? '0 2px 4px rgba(0, 0, 0, 0.2)' : 'none'
+                                    }}
+                                >
+                                    <DensitySmallIcon />
+                                </Button>
+                                <Button
+                                    color='primary'
+                                    onClick={() => setListType(Options.kanban)}
+                                    sx={{
+                                        borderColor: listType === Options.kanban ? 'primary.main' : 'rgba(0, 0, 0, 0.23)',
+                                        backgroundColor: 'transparent',
+                                        color: 'primary',
+                                        boxShadow: listType === Options.kanban ? '0 2px 4px rgba(0, 0, 0, 0.2)' : 'none'
+                                    }}
+                                >
+                                    <CalendarViewWeekOutlinedIcon />
+                                </Button>
+                            </ButtonGroup>
+                        </Box>
+                    </FilterBox>
+                    {listType === 'list' ?
+                        (<NegociacoesTable
+                            data={getNegociacoes()}
                             onSelect={onSelect}
                         />
-                    )}
-                {/*<NegociacaoModal
+                        ) : (
+                            <NegociacoesKankanList
+                                data={data}
+                                handleUpdate={updateNegociacaoGroup}
+                                onSelect={onSelect}
+                            />
+                        )}
+                    {/*<NegociacaoModal
                     open={open}
                     handleModal={handleModal}
                     data={negociacaoSelected}
@@ -88,12 +92,14 @@ export const HomeView = () => {
                     onCreate={addNegociacao}
                     onClose={onClose}
                 />*/}
-                <NegociacaoViewModal
-                    open={open}
-                    handleModal={onClose}
-                    data={negociacaoSelected}
-                />
-            </Box>
-        </Layout>
+                </Box>
+            </Layout>
+            <NegociacaoViewModal
+                open={open}
+                handleModal={onClose}
+                data={negociacaoSelected}
+                handleUpdate={onUpdateSelected}
+            />
+        </React.Fragment>
     )
 }

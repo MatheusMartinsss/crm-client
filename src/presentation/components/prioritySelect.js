@@ -3,7 +3,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
-import { Box } from '@mui/material';
+import { Box, MenuItem, Select } from '@mui/material';
 const prioritys = {
     minima: {
         icon: <KeyboardDoubleArrowDownIcon />,
@@ -37,37 +37,37 @@ const prioritys = {
     },
 };
 
-export const PrioritySelect = ({ priority }) => {
+export const PrioritySelect = ({ ...props }) => {
+    const { value, onChange } = props
     const selectedPriority = Object.values(prioritys).find(
-        (p) => p.name === priority
+        (p) => p.name === value
     );
+    return (
+        <Select
+            {...props}
+            value={selectedPriority?.name}
+            onChange={onChange}
+        >
+            {Object.values(prioritys).map((item) => (
+                <MenuItem value={item?.name} >
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'row'
+                    }}>
+                        <Box
+                            display='flex'
+                            color={item.color}
 
-    if (selectedPriority) {
-        return (
-            <Box
-                display="flex"
-                alignItems="center"
-                backgroundColor="#f0f0f0"
-                padding="8px"
-                borderRadius="4px"
-                cursor="pointer"
-                transition="background-color 0.3s"
-                _hover={{
-                    backgroundColor: '#e0e0e0',
-                }}
-            >
-                <Box
-                    display='flex'
-                    style={{
-                        color: selectedPriority.color,
-
-                    }}
-                >
-                    {selectedPriority.icon}
-                </Box>
-                <Box marginLeft="8px">{selectedPriority.label}</Box>
-            </Box>
-        );
-    }
-    return <Box>n/a</Box>;
+                        >
+                            {item.icon}
+                        </Box>
+                        <Box marginLeft="8px">
+                            {item.label}
+                        </Box>
+                    </Box>
+                </MenuItem>
+            ))}
+        </Select>
+    );
 }
+

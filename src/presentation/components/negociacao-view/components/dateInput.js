@@ -1,27 +1,18 @@
 import React from "react"
-import { Box, Typography } from "@mui/material"
+import { TextField } from "@mui/material"
 import format from "date-fns/format"
 
-export const DateInput = ({ date }) => {
+export const DateInput = ({ ...props }) => {
+    const { value, onChange } = props
+    const formattedDate = value ? format(new Date(value), "yyyy-MM-dd") : "";
     return (
-        <Box
-            display="flex"
-            alignItems="center"
-            backgroundColor="#f0f0f0"
-            padding="8px"
-            borderRadius="4px"
-            cursor="pointer"
-            transition="background-color 0.3s"
-            _hover={{
-                backgroundColor: '#e0e0e0',
-            }}
-            width={120}
+        <TextField
+            {...props}
+            value={formattedDate}
+            type="date"
+            onChange={onChange}
         >
-            {date ?
-                <Typography>{format(new Date(date), 'dd/MM/yyyy')}</Typography>
-                :
-                <Typography>N/A</Typography>
-            }
-        </Box>
+
+        </TextField>
     )
 }

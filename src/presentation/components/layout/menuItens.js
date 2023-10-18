@@ -19,5 +19,10 @@ export const menuItens = [
         label: 'Usuarios',
         path: '/users',
         icon: <ManageAccountsIcon />
+    },
+    {
+        label: 'Negociacao',
+        path: '/negociacao',
+        icon: <ManageAccountsIcon />
     }
 ]
