@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
-import { remoteListGroupsUseCase } from '../../domain/useCases/remote-groups-useCase';
+import { ListGroups } from '../../domain/useCases/remote-groups-useCase';
 
 export default function AutoCompleteGroups({ handleGroup, error, helperText, initialValue, ...props }) {
     const { onChange } = props
@@ -15,7 +15,7 @@ export default function AutoCompleteGroups({ handleGroup, error, helperText, ini
     }, [])
 
     const fetchGroups = async () => {
-        await remoteListGroupsUseCase()
+        await ListGroups()
             .then((response) => {
                 setOptions(response)
             })

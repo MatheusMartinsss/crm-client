@@ -1,7 +1,7 @@
 import Api from "../../helpers/api"
 import { ServerError, UnauthorizedError, NotFoundError } from "../errors/errors"
 import { httpStatusCode } from "../protocols/http-response"
-export const remoteListGroupsUseCase = async () => {
+export const ListGroups = async ({ searchBy }) => {
     try {
         const response = await Api.get('/groups')
         return response.data

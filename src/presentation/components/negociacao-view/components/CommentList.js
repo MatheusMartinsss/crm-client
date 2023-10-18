@@ -1,6 +1,6 @@
 import { Box, Avatar, Typography } from "@mui/material"
 import { CustomLabel } from "./styles"
-export const CommentList = ({ }) => {
+export const CommentList = () => {
     return (
         <Box display='flex' flexDirection='column'>
             <Box display='flex' flexDirection='row' gap={1} alignItems='center' >

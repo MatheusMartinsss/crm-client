@@ -19,7 +19,7 @@ const CommentTextField = styled(TextField)(({ theme }) => ({
     },
 }))
 
-export const CommentBox = ({ }) => {
+export const CommentBox = () => {
     return (
         <Box>
             <CustomLabel variant="subtitle1" fontWeight='bolder'>Comentarios</CustomLabel>

@@ -1,6 +1,6 @@
 import { Table, TableBody, TableCell, TableContainer, TableRow, IconButton, Paper } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { remoteListGroupsUseCase, remoteFetchGroupUseCase } from '../../../domain/useCases/remote-groups-useCase'
+import { ListGroups, remoteFetchGroupUseCase } from '../../../domain/useCases/remote-groups-useCase'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { GroupModal } from '../group-form/group-modal';
 import { useGroup } from '../../../domain/context/group-context';
@@ -25,7 +25,7 @@ export const GroupsList = () => {
     const [open, setOpen] = useState(false)
     useEffect(() => {
         const fetchData = async () => {
-            const response = await remoteListGroupsUseCase()
+            const response = await ListGroups()
             setGroups(response)
         }
         fetchData()

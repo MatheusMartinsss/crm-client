@@ -5,8 +5,7 @@ import { DragDropContext } from 'react-beautiful-dnd'
 
 import { GroupBox } from './group-box'
 
-const NegociacoesKankanList = ({ data, handleUpdate, onSelect }) => {
-
+const NegociacoesKankanList = ({ groups, negociacoes, handleUpdate, onSelect }) => {
     return (
         <React.Fragment>
             <DragDropContext onDragEnd={handleUpdate}>
@@ -15,17 +14,23 @@ const NegociacoesKankanList = ({ data, handleUpdate, onSelect }) => {
                     flexDirection={{ xs: 'column', md: 'row' }}
                     gap={1}
                 >
-                    {data.map((item) => (
-                        <GroupBox
-                            key={item.id}
-                            groupName={item.name}
-                            totalValue={item.valueTotal}
-                            groupDescription={item.description}
-                            groupId={item.id}
-                            data={item.Negociacoes}
-                            onSelect={onSelect}
-                        />
-                    ))}
+                    {groups.map((item) => {
+                        const groupNecociacoes = negociacoes.filter((n) => n.group_id === item.id)
+                        const totalValue = groupNecociacoes.reduce((acc, b) => {
+                            return acc + parseFloat(b.value)
+                        }, 0).toFixed(2)
+                        return (
+                            <GroupBox
+                                key={item.id}
+                                groupName={item.name}
+                                totalValue={totalValue}
+                                groupDescription={item.description}
+                                groupId={item.id}
+                                data={groupNecociacoes}
+                                onSelect={onSelect}
+                            />
+                        )
+                    })}
                 </Box>
             </DragDropContext>
         </React.Fragment>

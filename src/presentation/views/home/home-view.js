@@ -9,6 +9,8 @@ import { useNegociacao } from '../../hooks/useNegociacao';
 import Layout from '../../components/layout/layout';
 import { FilterBox } from '../../components/custom-styles/custom-styles';
 import { Modal } from '../../components/Modal/Modal';
+import { ListGroups } from '../../../domain/useCases/remote-groups-useCase';
+import { ListNegociacoes } from '../../../domain/useCases/remote-negociacoes-useCase';
 
 const Options = {
     kanban: 'kanban',
@@ -25,9 +27,47 @@ export const HomeView = () => {
     const [listType, setListType] = useState(Options.kanban)
     const [open, setOpen] = useState(false)
     const [negociacaoSelected, setSelected] = useState(null)
+    const [groups, setGroups] = useState([])
+    const [negociacoes, setNegociacoes] = useState([])
+    const [loading, setLoading] = useState({ groups: true, negociacoes: true })
+    useEffect(() => {
+        getGroups()
+        getNegociacoes()
+    }, [])
 
-    const { data, isLoading, getNegociacoes, updateNegociacaoGroup, getNegociacaoById, updateNegociacao, addNegociacao } = useNegociacao()
+    const { getNegociacaoById } = useNegociacao()
 
+    const getGroups = async () => {
+        await ListGroups({}).then((response) => {
+            setGroups(response)
+        }).catch((error) => {
+            console.log(error)
+        }).finally(() => {
+            setLoading((state) => ({ ...state, groups: !state.groups }))
+        })
+    }
+    const getNegociacoes = async () => {
+        await ListNegociacoes().then((response) => {
+            setNegociacoes(response)
+        }).catch((error) => {
+            console.log(error)
+        }).finally(() => {
+            setLoading((state) => ({ ...state, negociacoes: !state.negociacoes }))
+        })
+    }
+    const handleDrag = (result) => {
+        const { destination, draggableId } = result
+        const newValue = negociacoes.map((item) => {
+            if (item.id === draggableId) {
+                return {
+                    ...item,
+                    group_id: parseInt(destination.droppableId)
+                }
+            }
+            return item
+        })
+        setNegociacoes([...newValue])
+    }
     const onSelect = (id) => {
         const negociacao = getNegociacaoById(id)
         setSelected(negociacao)
@@ -65,14 +105,15 @@ export const HomeView = () => {
                     </FilterBox>
                     {listType === Options.list && (
                         <NegociacoesTable
-                            data={getNegociacoes()}
+                            data={negociacoes}
                             onSelect={onSelect}
                         />
                     )}
                     {listType === Options.kanban && (
                         <NegociacoesKankanList
-                            data={data}
-                            handleUpdate={updateNegociacaoGroup}
+                            groups={groups}
+                            negociacoes={negociacoes}
+                            handleUpdate={handleDrag}
                             onSelect={onSelect}
                         />
                     )}
