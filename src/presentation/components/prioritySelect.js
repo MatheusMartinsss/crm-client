@@ -45,7 +45,7 @@ export const PrioritySelect = ({ ...props }) => {
     return (
         <Select
             {...props}
-            value={selectedPriority?.name}
+            value={selectedPriority?.name || ''}
             onChange={onChange}
         >
             {Object.values(prioritys).map((item) => (

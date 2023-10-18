@@ -3,12 +3,12 @@ import React from 'react'
 import * as yup from "yup";
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup';
-import { createNegociacao, remoteUpdateNegociacaoUseCase } from '../../../domain/useCases/remote-negociacoes-useCase';
-import AutoCompleteTagsAdd from '../SelectTag';
+import { createNegociacao } from '../../../domain/useCases/remote-negociacoes-useCase';
 import AutoCompleteGroups from '../autoCompleteGroups';
 import AutoCompleteClientes from '../autoCompleteClientes';
-import { useNegociacao } from '../../../domain/context/useNegociacao';
 import { TextEditor } from '../TextEditor/TextEditor';
+import { PrioritySelect } from '../prioritySelect';
+import { enqueueSnackbar } from 'notistack';
 
 const CustomLabel = styled(Typography)({
     color: '#333333', // Cor personalizada
@@ -22,6 +22,8 @@ const CustomLabel = styled(Typography)({
 const CustomTextField = styled(TextField)({
 
 })
+
+
 const schema = yup.object({
     name: yup.string().required('Titulo obrigatório'),
     description: yup.mixed(),
@@ -31,27 +33,46 @@ const schema = yup.object({
     closeExpect: yup.date(),
 })
 
-export const NegociacaoForm = ({ data, handleModal, onCreate, onUpdate }) => {
-    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({ resolver: yupResolver(schema) })
-    const { addNegociacao, updateNegociacao } = useNegociacao()
+export const NegociacaoForm = ({ onCreate }) => {
+
+    const { register, handleSubmit, setValue, watch, formState: { errors }, reset } = useForm({ resolver: yupResolver(schema) })
+
     const Cliente = watch('Cliente')
     const description = watch('description')
     const group = watch('Group')
-    const handleForm = async (formData) => {
-        console.log(formData)
-        await createNegociacao(formData).then((response) => {
-            console.log(response)
-        })
+    const prioridade = watch('prioridade')
 
+    const onSubmit = async (data) => {
+        await createNegociacao(data)
+            .then((response) => {
+                enqueueSnackbar('Negociacao criada com sucesso',
+                    { variant: 'success', anchorOrigin: { horizontal: 'right', vertical: 'bottom' } }
+                )
+                clearForm()
+            }).catch((error) => {
+                enqueueSnackbar('Erro, entre em contato com o suporte!',
+                    { variant: 'error', anchorOrigin: { horizontal: 'right', vertical: 'bottom' } }
+                )
+            })
     }
-    const onEditorChange = (editorState) => {
-        setValue('description', editorState)
-    }
+
+    const onEditorChange = (editorState) => setValue('description', editorState)
     const handleGroup = (group) => setValue('Group', group)
     const handleCliente = (cliente) => setValue('Cliente', cliente)
+    const handlePriority = (e) => setValue('prioridade', e.target.value)
+
+    const clearForm = () => {
+        setValue('description', null)
+        setValue('Group', null)
+        setValue('Cliente', null)
+        setValue('prioridade', '')
+        reset()
+        return
+    }
+
     return (
-        <Grid container spacing={2} component='form' onSubmit={handleSubmit(handleForm)} >
-            <Grid item xs={12} md={6}>
+        <Grid container spacing={2} component='form' onSubmit={handleSubmit(onSubmit)} >
+            <Grid item xs={12} md={12}>
                 <Grid item xs direction='column'>
                     <Grid item xs>
                         <CustomLabel>
@@ -79,7 +100,7 @@ export const NegociacaoForm = ({ data, handleModal, onCreate, onUpdate }) => {
                     </Grid>
                     <Grid item xs>
                         <AutoCompleteGroups
-                            value={group}
+                            value={group || null}
                             onChange={handleGroup}
                             renderInput={(params) => (
                                 <CustomTextField
@@ -88,6 +109,22 @@ export const NegociacaoForm = ({ data, handleModal, onCreate, onUpdate }) => {
                                 >
                                 </CustomTextField>
                             )}
+                        />
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid item xs={12} md={6}>
+                <Grid item xs direction='column'>
+                    <Grid item xs>
+                        <CustomLabel>
+                            Prioridade
+                        </CustomLabel>
+                    </Grid>
+                    <Grid item xs>
+                        <PrioritySelect
+                            fullWidth
+                            value={prioridade || ''}
+                            onChange={handlePriority}
                         />
                     </Grid>
                 </Grid>

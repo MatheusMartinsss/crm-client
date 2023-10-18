@@ -2,11 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './main/routers/App';
 import UseAuthProvider from './domain/context/useAuth';
+import { SnackbarProvider } from 'notistack';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <UseAuthProvider>
-      <App />
+      <SnackbarProvider maxSnack={2} autoHideDuration={5000}>
+        <App />
+      </SnackbarProvider>
     </UseAuthProvider>
   </React.StrictMode>
 );

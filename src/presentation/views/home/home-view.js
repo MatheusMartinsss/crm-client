@@ -1,19 +1,26 @@
-import { Box, ButtonGroup, Button } from '@mui/material'
-import React, { useState } from 'react'
+import { Box, ButtonGroup, Button, styled } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import NegociacoesTable from '../../components/negociacoes-list/negociacoes-table'
 import NegociacoesKankanList from '../../components/kanban-list/negociacoes-kanban'
 import DensitySmallIcon from '@mui/icons-material/DensitySmall';
 import CalendarViewWeekOutlinedIcon from '@mui/icons-material/CalendarViewWeekOutlined';
-import { NegociacaoModal } from '../../components/negociacao-form/negociacao-modal';
-import { NegociacaoViewModal } from '../../components/negociacao-view/NegociacaoViewModal';
+import { NegociacaoBoard } from '../../components/negociacao-view/NegociacaoBoard';
 import { useNegociacao } from '../../hooks/useNegociacao';
 import Layout from '../../components/layout/layout';
 import { FilterBox } from '../../components/custom-styles/custom-styles';
+import { Modal } from '../../components/Modal/Modal';
 
 const Options = {
     kanban: 'kanban',
     list: 'list'
 }
+const CustomButton = styled(Button)((props) => ({
+    borderColor: props.isSelected ? 'primary.main' : 'rgba(0, 0, 0, 0.23)',
+    backgroundColor: 'transparent',
+    color: 'primary',
+    boxShadow: props.isSelected ? '0 2px 4px rgba(0, 0, 0, 0.2)' : 'none'
+}))
+
 export const HomeView = () => {
     const [listType, setListType] = useState(Options.kanban)
     const [open, setOpen] = useState(false)
@@ -22,17 +29,13 @@ export const HomeView = () => {
     const { data, isLoading, getNegociacoes, updateNegociacaoGroup, getNegociacaoById, updateNegociacao, addNegociacao } = useNegociacao()
 
     const onSelect = (id) => {
-        let negociacao = getNegociacaoById(id)
+        const negociacao = getNegociacaoById(id)
         setSelected(negociacao)
         handleModal()
     }
 
-    const handleModal = () => setOpen(true)
+    const handleModal = () => setOpen((state) => !state)
 
-    const onClose = () => {
-        setOpen(false)
-        setSelected(null)
-    }
     const onUpdateSelected = (key, data) => {
         console.log(data)
         //updateNegociacao(negociacaoSelected.group_id, negociacaoSelected.id, )
@@ -45,61 +48,43 @@ export const HomeView = () => {
                         <Box display='flex' alignItems='center' gap={2}>
                             <Button onClick={handleModal} size='small' variant='contained' color='primary'>+ Negocio</Button>
                             <ButtonGroup size='small' variant="outlined" aria-label="outlined primary button group" >
-                                <Button
-                                    color='primary'
+                                <CustomButton
                                     onClick={() => setListType(Options.list)}
-                                    sx={{
-                                        borderColor: listType === Options.list ? 'primary.main' : 'rgba(0, 0, 0, 0.23)',
-                                        backgroundColor: 'transparent',
-                                        color: 'primary',
-                                        boxShadow: listType === Options.list ? '0 2px 4px rgba(0, 0, 0, 0.2)' : 'none'
-                                    }}
+                                    isSelected={listType === Options.list}
                                 >
                                     <DensitySmallIcon />
-                                </Button>
-                                <Button
-                                    color='primary'
+                                </CustomButton>
+                                <CustomButton
                                     onClick={() => setListType(Options.kanban)}
-                                    sx={{
-                                        borderColor: listType === Options.kanban ? 'primary.main' : 'rgba(0, 0, 0, 0.23)',
-                                        backgroundColor: 'transparent',
-                                        color: 'primary',
-                                        boxShadow: listType === Options.kanban ? '0 2px 4px rgba(0, 0, 0, 0.2)' : 'none'
-                                    }}
+                                    isSelected={listType === Options.kanban}
                                 >
                                     <CalendarViewWeekOutlinedIcon />
-                                </Button>
+                                </CustomButton>
                             </ButtonGroup>
                         </Box>
                     </FilterBox>
-                    {listType === 'list' ?
-                        (<NegociacoesTable
+                    {listType === Options.list && (
+                        <NegociacoesTable
                             data={getNegociacoes()}
                             onSelect={onSelect}
                         />
-                        ) : (
-                            <NegociacoesKankanList
-                                data={data}
-                                handleUpdate={updateNegociacaoGroup}
-                                onSelect={onSelect}
-                            />
-                        )}
-                    {/*<NegociacaoModal
-                    open={open}
-                    handleModal={handleModal}
-                    data={negociacaoSelected}
-                    onUpdate={updateNegociacao}
-                    onCreate={addNegociacao}
-                    onClose={onClose}
-                />*/}
+                    )}
+                    {listType === Options.kanban && (
+                        <NegociacoesKankanList
+                            data={data}
+                            handleUpdate={updateNegociacaoGroup}
+                            onSelect={onSelect}
+                        />
+                    )}
+                    <Modal
+                        open={open}
+                        onClose={handleModal}
+                        maxWidth='lg'
+                    >
+                        <NegociacaoBoard data={negociacaoSelected} handleUpdate={onUpdateSelected} />
+                    </Modal>
                 </Box>
             </Layout>
-            <NegociacaoViewModal
-                open={open}
-                handleModal={onClose}
-                data={negociacaoSelected}
-                handleUpdate={onUpdateSelected}
-            />
         </React.Fragment>
     )
 }
