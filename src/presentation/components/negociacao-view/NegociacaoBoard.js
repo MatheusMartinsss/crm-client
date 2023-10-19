@@ -1,5 +1,4 @@
-import { Box,  Typography, styled, TextField, Grid, Avatar } from "@mui/material"
-import { useState } from "react"
+import { Box, Typography, styled, TextField, Grid, Avatar } from "@mui/material"
 import AutoCompleteGroups from "../autoCompleteGroups"
 import { PrioritySelect } from "../prioritySelect"
 import { DateInput } from "./components/dateInput"
@@ -95,8 +94,8 @@ export const NegociacaoBoard = ({ data, handleUpdate }) => {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'row', padding: '40px 5px 20px 30px', minHeight: '70vh' }}>
             <Box display='flex' flexDirection='column' width='70%' gap={2} >
-                <TitleBox title={data.name} />
-                <DescriptionBox description={data.description} />
+                <TitleBox title={data.name} onUpdate={handleUpdate} />
+                <DescriptionBox description={data.description} onUpdate={handleUpdate} />
                 <CommentBox />
                 <CommentList />
             </Box>
@@ -108,7 +107,7 @@ export const NegociacaoBoard = ({ data, handleUpdate }) => {
                             <AutoCompleteGroups
                                 value={data?.Group || ''}
                                 name='Group'
-                                onChange={(e) => onUpdate('Group', e.target)}
+                                onChange={(value) => onUpdate('Group', value)}
                                 renderInput={(params) => (
                                     <CustomGroupTextField
                                         name="Group"
@@ -137,7 +136,7 @@ export const NegociacaoBoard = ({ data, handleUpdate }) => {
                             />
                         </Box>
                     </Grid>
-                    <Grid item xs={12} display='flex' direction='column'>
+                    <Grid item xs={12} display='flex' flexDirection='column'>
                         <CustomLabel variant="subtitle2" >Previsão</CustomLabel>
                         <CustomInputDate
                             name='closeExpect'
@@ -145,7 +144,7 @@ export const NegociacaoBoard = ({ data, handleUpdate }) => {
                             onChange={(e) => onUpdate(e.target.name, e.target.value)}
                         />
                     </Grid>
-                    <Grid item xs={12} display='flex' direction='column'>
+                    <Grid item xs={12} display='flex' flexDirection='column'>
                         <CustomLabel variant="subtitle2" >Abertura</CustomLabel>
                         <CustomInputDate
                             name='createdAt'

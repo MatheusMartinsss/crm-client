@@ -48,8 +48,8 @@ export const PrioritySelect = ({ ...props }) => {
             value={selectedPriority?.name || ''}
             onChange={onChange}
         >
-            {Object.values(prioritys).map((item) => (
-                <MenuItem value={item?.name} >
+            {Object.values(prioritys).map((item, idx) => (
+                <MenuItem value={item?.name} key={idx} >
                     <Box sx={{
                         display: 'flex',
                         flexDirection: 'row'

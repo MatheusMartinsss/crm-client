@@ -5,7 +5,7 @@ import { CTableCellHeader, TableHeader } from "../custom-styles/custom-styles";
 import { TableCellDate } from "../TableCellDate";
 
 
-const createData = (id, groupName, title, vendedorName, clienteName, clienteLastName, closeExpect, tags) => {
+const createData = (id, groupName, title, vendedorName, clienteName, clienteLastName, closeExpect, prioridade) => {
     return {
         id,
         groupName,
@@ -14,7 +14,7 @@ const createData = (id, groupName, title, vendedorName, clienteName, clienteLast
         clienteName,
         clienteLastName,
         closeExpect,
-        tags
+        prioridade
     }
 }
 
@@ -35,8 +35,8 @@ const colums = [
         id: 'closeExpect',
         label: 'Fechamento Esperado'
     }, {
-        id: 'tags',
-        label: 'Status'
+        id: 'prioridade',
+        label: 'Prioridade'
     }, {
         id: 'options',
         label: 'Opções'
@@ -55,7 +55,7 @@ export default function NegociacoesTable({ data, onSelect }) {
         item.Cliente.name,
         item.Cliente.lastname,
         item.closeExpect,
-        item.Tag
+        item.prioridade
     ))
     const handleSortChange = (column) => {
         const sortOrder = column === orderBy && order === 'asc' ? 'desc' : 'asc';
@@ -77,6 +77,7 @@ export default function NegociacoesTable({ data, onSelect }) {
             return sorted
         }
     }
+
     return (
         <React.Fragment>
             <TableContainer component={Paper} sx={{ height: 650 }}>
@@ -104,16 +105,7 @@ export default function NegociacoesTable({ data, onSelect }) {
                                 <TableCell align="left">{row?.vendedorName}</TableCell>
                                 <TableCell align="left">{row?.clienteName} {row?.clienteLastname}</TableCell>
                                 <TableCellDate align='left' date={row.closeExpect} />
-                                <TableCell align='left' >
-                                    <Chip
-                                        key={row?.tags?.id}
-                                        size='small'
-
-                                        variant='string'
-                                        sx={{ backgroundColor: row?.tags?.color, border: '1px' }}
-                                        label={row?.tags?.name}>
-                                    </Chip>
-                                </TableCell>
+                                <TableCell align='left' >{row.prioridade}</TableCell>
                                 <TableCell align="left">
                                     <IconButton onClick={() => onSelect(row.id)}>
                                         <VisibilityIcon />

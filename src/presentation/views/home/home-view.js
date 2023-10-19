@@ -5,22 +5,23 @@ import NegociacoesKankanList from '../../components/kanban-list/negociacoes-kanb
 import DensitySmallIcon from '@mui/icons-material/DensitySmall';
 import CalendarViewWeekOutlinedIcon from '@mui/icons-material/CalendarViewWeekOutlined';
 import { NegociacaoBoard } from '../../components/negociacao-view/NegociacaoBoard';
-import { useNegociacao } from '../../hooks/useNegociacao';
+
 import Layout from '../../components/layout/layout';
 import { FilterBox } from '../../components/custom-styles/custom-styles';
 import { Modal } from '../../components/Modal/Modal';
 import { ListGroups } from '../../../domain/useCases/remote-groups-useCase';
-import { ListNegociacoes } from '../../../domain/useCases/remote-negociacoes-useCase';
+import { ListNegociacoes, updateNegociacao } from '../../../domain/useCases/remote-negociacoes-useCase';
+import { enqueueSnackbar } from 'notistack';
 
 const Options = {
     kanban: 'kanban',
     list: 'list'
 }
 const CustomButton = styled(Button)((props) => ({
-    borderColor: props.isSelected ? 'primary.main' : 'rgba(0, 0, 0, 0.23)',
+    borderColor: props.selected ? 'primary.main' : 'rgba(0, 0, 0, 0.23)',
     backgroundColor: 'transparent',
     color: 'primary',
-    boxShadow: props.isSelected ? '0 2px 4px rgba(0, 0, 0, 0.2)' : 'none'
+    boxShadow: props.selected ? '0 2px 4px rgba(0, 0, 0, 0.2)' : 'none'
 }))
 
 export const HomeView = () => {
@@ -35,10 +36,8 @@ export const HomeView = () => {
         getNegociacoes()
     }, [])
 
-    const { getNegociacaoById } = useNegociacao()
-
     const getGroups = async () => {
-        await ListGroups({}).then((response) => {
+        await ListGroups().then((response) => {
             setGroups(response)
         }).catch((error) => {
             console.log(error)
@@ -68,17 +67,31 @@ export const HomeView = () => {
         })
         setNegociacoes([...newValue])
     }
-    const onSelect = (id) => {
-        const negociacao = getNegociacaoById(id)
-        setSelected(negociacao)
+    const onSelect = (data) => {
+        setSelected(data)
         handleModal()
+    }
+
+    const getSelected = () => {
+        return negociacoes.find((item) => item.id === negociacaoSelected)
     }
 
     const handleModal = () => setOpen((state) => !state)
 
-    const onUpdateSelected = (key, data) => {
-        console.log(data)
-        //updateNegociacao(negociacaoSelected.group_id, negociacaoSelected.id, )
+    const onUpdateSelected = async (key, data) => {
+        const body = { [key]: data }
+        await updateNegociacao(negociacaoSelected, body).then((response) => {
+            const newValue = negociacoes.map((item) => {
+                if (item.id === response.id) {
+                    return response
+                }
+                return item
+            })
+            setNegociacoes([...newValue])
+            enqueueSnackbar('Negociacao atualizada com sucesso!', { variant: 'success', anchorOrigin: { horizontal: 'right', vertical: 'bottom' } })
+        }).catch((error) => {
+            enqueueSnackbar('Houve um erro na atualização!', { variant: 'error', anchorOrigin: { horizontal: 'right', vertical: 'bottom' } })
+        })
     }
     return (
         <React.Fragment>
@@ -90,13 +103,13 @@ export const HomeView = () => {
                             <ButtonGroup size='small' variant="outlined" aria-label="outlined primary button group" >
                                 <CustomButton
                                     onClick={() => setListType(Options.list)}
-                                    isSelected={listType === Options.list}
+                                    selected={listType === Options.list}
                                 >
                                     <DensitySmallIcon />
                                 </CustomButton>
                                 <CustomButton
                                     onClick={() => setListType(Options.kanban)}
-                                    isSelected={listType === Options.kanban}
+                                    selected={listType === Options.kanban}
                                 >
                                     <CalendarViewWeekOutlinedIcon />
                                 </CustomButton>
@@ -122,7 +135,10 @@ export const HomeView = () => {
                         onClose={handleModal}
                         maxWidth='lg'
                     >
-                        <NegociacaoBoard data={negociacaoSelected} handleUpdate={onUpdateSelected} />
+                        <NegociacaoBoard
+                            data={getSelected()}
+                            handleUpdate={onUpdateSelected}
+                        />
                     </Modal>
                 </Box>
             </Layout>

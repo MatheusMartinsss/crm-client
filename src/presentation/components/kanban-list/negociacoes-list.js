@@ -8,7 +8,7 @@ const getListStyle = isDraggingOver => ({
     width: 400,
 });
 
-const NegociacoesList = ({ negociacoes, group, index, groupId, onSelect }) => {
+const NegociacoesList = ({ negociacoes, index, groupId, onSelect }) => {
     return (
         <Droppable droppableId={groupId.toString()} key={index}>
             {(provided, snapshot) => (

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react'
-import { Box,  Paper, Typography, styled, Stack } from "@mui/material";
+import { Box, Paper, Typography, styled, Stack } from "@mui/material";
 import { menuItens } from './menuItens'
 import { MenuItem } from './menuItem';
 
@@ -45,6 +45,7 @@ export const Sidebar = () => {
                     const isActive = item.path === window.location.pathname
                     return (
                         <Stack
+                            key={idx}
                             component='ul'
                             spacing={0.5}
                             sx={{

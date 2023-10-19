@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogTitle } from "@mui/material"
+import { Dialog, DialogContent } from "@mui/material"
 
 
 export const Modal = ({ children, ...props }) => {

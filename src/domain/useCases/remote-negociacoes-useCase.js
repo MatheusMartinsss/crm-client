@@ -37,7 +37,7 @@ export const remoteFetchNegociacaoUseCase = async (id) => {
         }
     }
 }
-export const remoteUpdateNegociacaoUseCase = async (id, body) => {
+export const updateNegociacao = async (id, body) => {
     try {
         const response = await Api.put(`/negociacao/${id}`, { ...body })
         return response.data
