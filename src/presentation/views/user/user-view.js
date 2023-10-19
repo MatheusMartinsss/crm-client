@@ -11,7 +11,7 @@ export const UserView = () => {
     const handleModal = () => setOpen((state) => !state)
     return (
         <Layout>
-            <Box display='flex' justifyContent='space-between' flexDirection='column' gap={1}>
+            <Box display='flex'  flexDirection='column' gap={1} width='100%'>
                 <FilterBox>
                     <Box display='flex' flexDirection='row'>
                         <Button size='small' onClick={handleModal} variant='contained'>Novo Usuario</Button>

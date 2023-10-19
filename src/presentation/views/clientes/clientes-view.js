@@ -11,7 +11,7 @@ export const ClientesView = () => {
 
     return (
         <Layout>
-            <Box display='flex' flexDirection='column'  >
+            <Box display='flex' flexDirection='column' width='100%'  >
                 <FilterBox>
                     <ButtonGroup size='small' variant="outlined" aria-label="outlined primary button group">
                         <Button onClick={handleOpen} variant="contained">Novo Cliente</Button>
