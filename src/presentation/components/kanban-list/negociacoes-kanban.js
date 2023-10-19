@@ -13,6 +13,9 @@ const NegociacoesKankanList = ({ groups, negociacoes, handleUpdate, onSelect }) 
                     display='flex'
                     flexDirection={{ xs: 'column', md: 'row' }}
                     gap={1}
+                    sx={{
+                        overflowX: 'auto'
+                    }}
                 >
                     {groups.map((item) => {
                         const groupNecociacoes = negociacoes.filter((n) => n.group_id === item.id)

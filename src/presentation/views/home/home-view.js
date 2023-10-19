@@ -99,19 +99,18 @@ export const HomeView = () => {
                 <Box display='flex' justifyContent='space-between' flexDirection='column' gap={1}>
                     <FilterBox>
                         <Box display='flex' alignItems='center' gap={2}>
-                            <Button onClick={handleModal} size='small' variant='contained' color='primary'>+ Negocio</Button>
                             <ButtonGroup size='small' variant="outlined" aria-label="outlined primary button group" >
-                                <CustomButton
-                                    onClick={() => setListType(Options.list)}
-                                    selected={listType === Options.list}
-                                >
-                                    <DensitySmallIcon />
-                                </CustomButton>
                                 <CustomButton
                                     onClick={() => setListType(Options.kanban)}
                                     selected={listType === Options.kanban}
                                 >
                                     <CalendarViewWeekOutlinedIcon />
+                                </CustomButton>
+                                <CustomButton
+                                    onClick={() => setListType(Options.list)}
+                                    selected={listType === Options.list}
+                                >
+                                    <DensitySmallIcon />
                                 </CustomButton>
                             </ButtonGroup>
                         </Box>

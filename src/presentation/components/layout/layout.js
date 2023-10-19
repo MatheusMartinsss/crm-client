@@ -17,7 +17,7 @@ const Layout = ({ children }) => {
                 </Box>
                 <Box sx={{ flex: 1, gap: 5, display: 'flex', flexDirection: 'column' }}>
                     <Header />
-                    <Box paddingLeft={6} paddingRight={6} flex={1}>
+                    <Box maxWidth='95vw' margin='auto' flex={1}>
                         {children}
                     </Box>
                 </Box>
