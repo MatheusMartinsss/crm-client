@@ -10,14 +10,19 @@ const Layout = ({ children }) => {
         <ThemeProvider
             theme={LightTheme}
         >
-            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', minHeight: '100vh' }}>
                 <CssBaseline />
-                <Box width='100px'>
+                <Box width={100}>
                     <Sidebar />
                 </Box>
-                <Box sx={{ flex: 1, gap: 5, display: 'flex', flexDirection: 'column' }}>
+                <Box display='flex' flexDirection='column' flexGrow={1}>
                     <Header />
-                    <Box maxWidth='95vw' margin='auto' flex={1}>
+                    <Box sx={{
+                        display: 'flex',
+                        padding: '40px 40px 0px 40px',
+                        maxWidth: 'calc(100vw - 100px)',
+                        flexGrow: 1
+                    }}>
                         {children}
                     </Box>
                 </Box>

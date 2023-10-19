@@ -11,7 +11,7 @@ export const GroupsView = () => {
     const handleModal = () => setOpen((state) => !state)
     return (
         <Layout>
-            <Box display='flex' justifyContent='space-between' flexDirection='column' gap={1}>
+            <Box display='flex' justifyContent='center' flexDirection='column' width='100%'  gap={1}>
                 <FilterBox>
                     <Box>
                         <Button size='small' onClick={handleModal} variant='contained' color='primary'>nova Etapa</Button>

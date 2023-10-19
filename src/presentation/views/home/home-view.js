@@ -94,27 +94,28 @@ export const HomeView = () => {
         })
     }
     return (
-        <React.Fragment>
-            <Layout>
-                <Box display='flex' justifyContent='space-between' flexDirection='column' gap={1}>
-                    <FilterBox>
-                        <Box display='flex' alignItems='center' gap={2}>
-                            <ButtonGroup size='small' variant="outlined" aria-label="outlined primary button group" >
-                                <CustomButton
-                                    onClick={() => setListType(Options.kanban)}
-                                    selected={listType === Options.kanban}
-                                >
-                                    <CalendarViewWeekOutlinedIcon />
-                                </CustomButton>
-                                <CustomButton
-                                    onClick={() => setListType(Options.list)}
-                                    selected={listType === Options.list}
-                                >
-                                    <DensitySmallIcon />
-                                </CustomButton>
-                            </ButtonGroup>
-                        </Box>
-                    </FilterBox>
+
+        <Layout>
+            <Box display='flex' flexDirection='column' gap={1} width='100%'>
+                <FilterBox>
+                    <Box display='flex' alignItems='center' gap={2}>
+                        <ButtonGroup size='small' variant="outlined" aria-label="outlined primary button group" >
+                            <CustomButton
+                                onClick={() => setListType(Options.kanban)}
+                                selected={listType === Options.kanban}
+                            >
+                                <CalendarViewWeekOutlinedIcon />
+                            </CustomButton>
+                            <CustomButton
+                                onClick={() => setListType(Options.list)}
+                                selected={listType === Options.list}
+                            >
+                                <DensitySmallIcon />
+                            </CustomButton>
+                        </ButtonGroup>
+                    </Box>
+                </FilterBox>
+                <Box >
                     {listType === Options.list && (
                         <NegociacoesTable
                             data={negociacoes}
@@ -129,18 +130,19 @@ export const HomeView = () => {
                             onSelect={onSelect}
                         />
                     )}
-                    <Modal
-                        open={open}
-                        onClose={handleModal}
-                        maxWidth='lg'
-                    >
-                        <NegociacaoBoard
-                            data={getSelected()}
-                            handleUpdate={onUpdateSelected}
-                        />
-                    </Modal>
                 </Box>
-            </Layout>
-        </React.Fragment>
+                <Modal
+                    open={open}
+                    onClose={handleModal}
+                    maxWidth='lg'
+                >
+                    <NegociacaoBoard
+                        data={getSelected()}
+                        handleUpdate={onUpdateSelected}
+                    />
+                </Modal>
+            </Box>
+        </Layout>
+
     )
 }

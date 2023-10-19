@@ -10,7 +10,7 @@ const getListStyle = isDraggingOver => ({
 
 const NegociacoesList = ({ negociacoes, index, groupId, onSelect }) => {
     return (
-        <Droppable droppableId={groupId.toString()} key={index}>
+        <Droppable droppableId={groupId.toString()} key={index} direction='vertical'>
             {(provided, snapshot) => (
                 <Box
                     display='flex'
