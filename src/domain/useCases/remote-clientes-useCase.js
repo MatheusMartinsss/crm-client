@@ -1,7 +1,7 @@
 import Api from "../../helpers/api"
 import { ServerError, UnauthorizedError, NotFoundError } from "../errors/errors"
 import { httpStatusCode } from "../protocols/http-response"
-export const remoteListClientesUseCase = async () => {
+export const ListClientes = async () => {
     try {
         const response = await Api.get('/clientes')
         return response.data

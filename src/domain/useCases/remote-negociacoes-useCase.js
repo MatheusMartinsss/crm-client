@@ -1,9 +1,14 @@
 import Api from "../../helpers/api"
 import { ServerError, UnauthorizedError, NotFoundError } from "../errors/errors"
 import { httpStatusCode } from "../protocols/http-response"
-export const ListNegociacoes = async () => {
+export const ListNegociacoes = async ({ clienteId, prioridade }) => {
     try {
-        const response = await Api.get('/negociacoes')
+        const response = await Api.get('/negociacoes', {
+            params: {
+                clienteId,
+                prioridade
+            }
+        })
         return response.data
     } catch (error) {
         switch (error.response.status) {

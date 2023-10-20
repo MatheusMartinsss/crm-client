@@ -1,12 +1,12 @@
 import { useState } from "react"
-import { remoteListClientesUseCase } from "../../domain/useCases/remote-clientes-useCase"
+import { ListClientes } from "../../domain/useCases/remote-clientes-useCase"
 export const useCliente = () => {
     const [data, setData] = useState([])
     const [isLoading, setIsLoading] = useState(false)
 
     const fetchData = async () => {
         setIsLoading(true)
-        await remoteListClientesUseCase()
+        await ListClientes()
             .then((response) => setData(response))
             .finally(() => setIsLoading(false))
     }

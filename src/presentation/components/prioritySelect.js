@@ -1,41 +1,6 @@
-import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
-import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import { Box, MenuItem, Select } from '@mui/material';
-const prioritys = {
-    minima: {
-        icon: <KeyboardDoubleArrowDownIcon />,
-        name: 'minima',
-        label: 'Minima',
-        color: '#8bc34a', // Verde claro
-    },
-    baixa: {
-        icon: <KeyboardArrowDownIcon />,
-        name: 'baixa',
-        label: 'Baixa',
-        color: '#2196f3', // Azul
-    },
-    media: {
-        icon: <KeyboardArrowUpIcon />,
-        name: 'media',
-        label: 'Media',
-        color: '#ffc107', // Amarelo
-    },
-    alta: {
-        icon: <KeyboardDoubleArrowUpIcon />,
-        name: 'alta',
-        label: 'Alta',
-        color: '#ff5722', // Laranja
-    },
-    critica: {
-        icon: <PriorityHighIcon />,
-        name: 'critica',
-        label: 'Critica',
-        color: '#f44336', // Vermelho
-    },
-};
+import { prioritys } from '../../helpers/consts/prioridades';
+
 
 export const PrioritySelect = ({ ...props }) => {
     const { value, onChange } = props
@@ -48,6 +13,7 @@ export const PrioritySelect = ({ ...props }) => {
             value={selectedPriority?.name || ''}
             onChange={onChange}
         >
+            <MenuItem sx={{ display: 'flex', justifyContent: 'center', height: '25px' }} value=""></MenuItem>
             {Object.values(prioritys).map((item, idx) => (
                 <MenuItem value={item?.name} key={idx} >
                     <Box sx={{

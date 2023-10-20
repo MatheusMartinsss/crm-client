@@ -1,17 +1,20 @@
-import { Box, ButtonGroup, Button, styled } from '@mui/material'
+import { Box, ButtonGroup, Button, styled, Grid, TextField, InputAdornment } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import NegociacoesTable from '../../components/negociacoes-list/negociacoes-table'
 import NegociacoesKankanList from '../../components/kanban-list/negociacoes-kanban'
 import DensitySmallIcon from '@mui/icons-material/DensitySmall';
 import CalendarViewWeekOutlinedIcon from '@mui/icons-material/CalendarViewWeekOutlined';
 import { NegociacaoBoard } from '../../components/negociacao-view/NegociacaoBoard';
-
 import Layout from '../../components/layout/layout';
 import { FilterBox } from '../../components/custom-styles/custom-styles';
 import { Modal } from '../../components/Modal/Modal';
 import { ListGroups } from '../../../domain/useCases/remote-groups-useCase';
 import { ListNegociacoes, updateNegociacao } from '../../../domain/useCases/remote-negociacoes-useCase';
 import { enqueueSnackbar } from 'notistack';
+import { PrioritySelect } from '../../components/prioritySelect';
+import SearchClientes from '../../components/SearchClientes';
+import SearchIcon from '@mui/icons-material/Search'
+
 
 const Options = {
     kanban: 'kanban',
@@ -19,10 +22,22 @@ const Options = {
 }
 const CustomButton = styled(Button)((props) => ({
     borderColor: props.selected ? 'primary.main' : 'rgba(0, 0, 0, 0.23)',
-    backgroundColor: 'transparent',
     color: 'primary',
     boxShadow: props.selected ? '0 2px 4px rgba(0, 0, 0, 0.2)' : 'none'
 }))
+CustomButton.defaultProps = {
+    size: 'large'
+}
+
+const CustomTextField = styled(TextField)({
+
+})
+
+CustomTextField.defaultProps = {
+    size: 'large'
+}
+
+
 
 export const HomeView = () => {
     const [listType, setListType] = useState(Options.kanban)
@@ -31,10 +46,15 @@ export const HomeView = () => {
     const [groups, setGroups] = useState([])
     const [negociacoes, setNegociacoes] = useState([])
     const [loading, setLoading] = useState({ groups: true, negociacoes: true })
+    const [query, setQuery] = useState({ from: '', to: '', prioridade: '', cliente: null })
+
     useEffect(() => {
         getGroups()
-        getNegociacoes()
     }, [])
+    useEffect(() => {
+        getNegociacoes();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [query]);
 
     const getGroups = async () => {
         await ListGroups().then((response) => {
@@ -46,7 +66,10 @@ export const HomeView = () => {
         })
     }
     const getNegociacoes = async () => {
-        await ListNegociacoes().then((response) => {
+        await ListNegociacoes({
+            clienteId: query?.cliente?.id,
+            prioridade: query.prioridade
+        }).then((response) => {
             setNegociacoes(response)
         }).catch((error) => {
             console.log(error)
@@ -78,6 +101,8 @@ export const HomeView = () => {
 
     const handleModal = () => setOpen((state) => !state)
 
+
+
     const onUpdateSelected = async (key, data) => {
         const body = { [key]: data }
         await updateNegociacao(negociacaoSelected, body).then((response) => {
@@ -98,22 +123,55 @@ export const HomeView = () => {
         <Layout>
             <Box display='flex' flexDirection='column' gap={1} width='100%'>
                 <FilterBox>
-                    <Box display='flex' alignItems='center' gap={2}>
-                        <ButtonGroup size='small' variant="outlined" aria-label="outlined primary button group" >
-                            <CustomButton
-                                onClick={() => setListType(Options.kanban)}
-                                selected={listType === Options.kanban}
-                            >
-                                <CalendarViewWeekOutlinedIcon />
-                            </CustomButton>
-                            <CustomButton
-                                onClick={() => setListType(Options.list)}
-                                selected={listType === Options.list}
-                            >
-                                <DensitySmallIcon />
-                            </CustomButton>
-                        </ButtonGroup>
-                    </Box>
+                    <Grid container spacing={1} display='flex' alignItems='center'>
+                        <Grid item >
+                            <ButtonGroup size='small' variant="outlined" aria-label="outlined primary button group" >
+                                <CustomButton
+                                    onClick={() => setListType(Options.kanban)}
+                                    selected={listType === Options.kanban}
+                                >
+                                    <CalendarViewWeekOutlinedIcon />
+                                </CustomButton>
+                                <CustomButton
+                                    onClick={() => setListType(Options.list)}
+                                    selected={listType === Options.list}
+                                >
+                                    <DensitySmallIcon />
+                                </CustomButton>
+                            </ButtonGroup>
+                        </Grid>
+                        <Grid item xs={2}>
+                            <SearchClientes
+                                value={query.cliente}
+                                size='small'
+                                onChange={(value) => setQuery((state) => ({ ...state, cliente: value }))}
+                                renderInput={(params) => (
+                                    <CustomTextField
+                                        {...params}
+                                        fullWidth
+                                        placeholder='Clientes..'
+                                        InputProps={{
+                                            ...params.InputProps,
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <SearchIcon />
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                    >
+                                    </CustomTextField>
+                                )}
+                            />
+                        </Grid>
+                        <Grid item xs = {1} >
+                            <PrioritySelect
+                                fullWidth
+                                value={query.prioridade}
+                                size='small'
+                                onChange={(e) => setQuery((state) => ({ ...state, prioridade: e.target.value }))}
+                            />
+                        </Grid>
+                    </Grid>
                 </FilterBox>
                 <Box >
                     {listType === Options.list && (
@@ -142,7 +200,7 @@ export const HomeView = () => {
                     />
                 </Modal>
             </Box>
-        </Layout>
+        </Layout >
 
     )
 }

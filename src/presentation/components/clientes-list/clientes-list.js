@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Table, TableBody, TableCell, TableContainer, TableRow, IconButton, Paper } from '@mui/material'
-import { remoteListClientesUseCase, remotefetchClienteUseCase } from '../../../domain/useCases/remote-clientes-useCase'
+import { ListClientes, remotefetchClienteUseCase } from '../../../domain/useCases/remote-clientes-useCase'
 import { useCliente } from '../../../domain/context/cliente-context';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { ClienteModal } from '../cliente-form/cliente-modal';
@@ -34,7 +34,7 @@ export const ClientesList = () => {
     let data = getClientes()
     useEffect(() => {
         const fetchClientes = async () => {
-            const response = await remoteListClientesUseCase()
+            const response = await ListClientes()
             setClientes(response)
         }
         fetchClientes()

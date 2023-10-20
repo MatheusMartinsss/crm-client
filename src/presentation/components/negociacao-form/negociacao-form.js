@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup';
 import { createNegociacao } from '../../../domain/useCases/remote-negociacoes-useCase';
 import AutoCompleteGroups from '../autoCompleteGroups';
-import AutoCompleteClientes from '../autoCompleteClientes';
+import SearchClientes from '../SearchClientes';
 import { TextEditor } from '../TextEditor/TextEditor';
 import { PrioritySelect } from '../prioritySelect';
 import { enqueueSnackbar } from 'notistack';
@@ -155,11 +155,12 @@ export const NegociacaoForm = ({ onCreate }) => {
                         <CustomLabel>Cliente</CustomLabel>
                     </Grid>
                     <Grid item xs>
-                        <AutoCompleteClientes
-                            handleCliente={handleCliente}
+                        <SearchClientes
+                            onChange={handleCliente}
                             error={!!errors.cliente_id}
                             helperText={errors?.cliente_id?.message}
-                            initialValue={Cliente}
+                            value={Cliente}
+                            createoption={true}
                         />
                     </Grid>
                 </Grid>

@@ -19,5 +19,6 @@ export const FilterBox = styled(Box)({
     borderRadius: '8px',
     padding: '16px',
     width: '100%',
-    maxWidth: '100%'
+    maxWidth: '100%',
+    backgroundColor: 'white'
 })

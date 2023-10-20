@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableRow, Paper, Chip, TableContainer, Ico
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { CTableCellHeader, TableHeader } from "../custom-styles/custom-styles";
 import { TableCellDate } from "../TableCellDate";
+import { PriorityChip } from "../PriorityChip/PriorityChip";
 
 
 const createData = (id, groupName, title, vendedorName, clienteName, clienteLastName, closeExpect, prioridade) => {
@@ -105,7 +106,7 @@ export default function NegociacoesTable({ data, onSelect }) {
                                 <TableCell align="left">{row?.vendedorName}</TableCell>
                                 <TableCell align="left">{row?.clienteName} {row?.clienteLastname}</TableCell>
                                 <TableCellDate align='left' date={row.closeExpect} />
-                                <TableCell align='left' >{row.prioridade}</TableCell>
+                                <TableCell align='left' ><PriorityChip label={row.prioridade} /></TableCell>
                                 <TableCell align="left">
                                     <IconButton onClick={() => onSelect(row.id)}>
                                         <VisibilityIcon />

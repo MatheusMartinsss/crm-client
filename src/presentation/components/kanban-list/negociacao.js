@@ -1,6 +1,7 @@
 import React from 'react'
 import { Box, Typography, Paper, Avatar, Stack } from '@mui/material'
 import { Draggable } from "react-beautiful-dnd";
+import { PriorityChip } from '../PriorityChip/PriorityChip';
 const getItemStyle = (isDragging, draggableStyle) => ({
     // some basic styles to make the items look a bit nicer
     userSelect: "none",
@@ -13,7 +14,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
     ...draggableStyle
 });
 const Negociacao = ({ negociacao, index, onSelect }) => {
-    const { name, Cliente, value, id, Tag } = negociacao
+    const { name, Cliente, value, id, prioridade } = negociacao
     return (
         <Draggable key={id} draggableId={id.toString()} index={index}  >
             {(provided, snapshot) => (
@@ -39,8 +40,8 @@ const Negociacao = ({ negociacao, index, onSelect }) => {
                             <Typography variant='subtitle2'>{Cliente.name}</Typography>
                         </Stack>
                         <Typography variant='subtitle2'>R${value}</Typography>
+                        <PriorityChip label={prioridade} />
                     </Stack>
-                    <Box height={5} borderRadius={16} display='flex' bgcolor={Tag?.color} />
                 </Box>
             )}
         </Draggable>
